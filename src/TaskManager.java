@@ -119,6 +119,15 @@ public class TaskManager {
         epic.addSubTaskToEpic(subTask);
     }
 
+    public void setStatusTask(Task task, String newStatus){
+        task.setStatus(newStatus);
+    }
+
+    public void setStatusSubTask(SubTask subTask, String newStatus){
+        subTask.setStatus(newStatus);
+        epicList.get(subTask.getEpicID()).updateStatus(epicList.get(subTask.getEpicID()));
+    }
+
     public ArrayList getSubTasksFromEpic(Epic epic){
         return epic.getListSubTasks();
     }

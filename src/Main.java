@@ -19,7 +19,12 @@ public class Main {
         //Измените статусы созданных объектов, распечатайте. Проверьте, что статус задачи и подзадачи сохранился,
         // а статус эпика рассчитался по статусам подзадач.
         System.out.println(task1);
-        taskManager.updateTask(task1.getID(task1), "new Task1", "Change status", "IN_PROGRESS");
+        taskManager.setStatusTask(task1,"IN_PROGRESS");
         System.out.println(task1);
+        System.out.println(epic2);
+        System.out.println(subTask3);
+        taskManager.setStatusSubTask(subTask3,"DONE");
+        System.out.println(epic2);
+        System.out.println(subTask3);
     }
 }

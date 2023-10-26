@@ -22,6 +22,7 @@ public class Epic extends Task{
     public ArrayList getListSubTasks(){
         return (ArrayList<SubTask>) listSubTasks.clone();
     }
+
     public void updateStatus(Epic epic){
         String newStatus = null;
         int newSum = 0;
