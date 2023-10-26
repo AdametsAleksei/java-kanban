@@ -32,7 +32,7 @@ public class TaskManager {
 
     public ArrayList getAllTask(){
         ArrayList<Task> list = new ArrayList<>();
-        for (Task task: epicList.values()){
+        for (Task task: tasksList.values()){
             list.add(task);
         }
         return list;
@@ -91,17 +91,36 @@ public class TaskManager {
             epicList.remove(taskID);
         } else if (subTaskList.containsKey(taskID)){
             Epic epic = epicList.get(subTaskList.get(taskID).getEpicID());
-                epic.removeSubTaskFromEpic(epic, subTaskList.get(taskID));
+                epic.removeSubTaskFromEpic(subTaskList.get(taskID));
                 subTaskList.remove(taskID);
         }
     }
 
-    public void updateTask(Task oldTask, Task newTask){
-        if (oldTask.getClass().equals(newTask.getClass())){
-            if (oldTask.getClass().toString().equals("class Task")){
+    public void updateTask(int taskID, String name, String description, String status){
+        Task newTask = new Task(name, description, taskID, status);
+        tasksList.replace(taskID,newTask);
+    }
 
+    public void updateEpic(int epicID, String name, String description){
+        Epic newEpic = new Epic(name, description, epicID, "NEW");
+        newEpic.updateStatus(newEpic);
+        for(SubTask subTask : subTaskList.values()){
+            if (subTask.getEpicID() == epicID){
+                newEpic.addSubTaskToEpic(subTask);
             }
         }
+        epicList.replace(epicID,newEpic);
+    }
+
+    public void updateSubTask(int taskID, Epic epic, String name, String description, String status){
+        SubTask subTask = new SubTask(name, description, taskID, status, epic.getID(epic));
+        epic.removeSubTaskFromEpic(subTaskList.get(taskID));
+        subTaskList.replace(taskID,subTask);
+        epic.addSubTaskToEpic(subTask);
+    }
+
+    public ArrayList getSubTasksFromEpic(Epic epic){
+        return epic.getListSubTasks();
     }
 
     public int getTaskID(Task task){

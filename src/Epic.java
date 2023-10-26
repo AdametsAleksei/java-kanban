@@ -6,7 +6,6 @@ public class Epic extends Task{
 
     public Epic(String taskName, String description, int id, String status) {
         super(taskName, description, id, status);
-        this.status = null;
         listSubTasks = new ArrayList<>();
     }
 
@@ -15,12 +14,15 @@ public class Epic extends Task{
         updateStatus(this);
     }
 
-    public void removeSubTaskFromEpic(Epic epic, SubTask subTask){
-        epic.listSubTasks.remove(subTask);
-        updateStatus(epic);
+    public void removeSubTaskFromEpic(SubTask subTask){
+        listSubTasks.remove(subTask);
+        updateStatus(this);
     }
 
-    private void updateStatus(Epic epic){
+    public ArrayList getListSubTasks(){
+        return (ArrayList<SubTask>) listSubTasks.clone();
+    }
+    public void updateStatus(Epic epic){
         String newStatus = null;
         int newSum = 0;
         int doneSum = 0;
