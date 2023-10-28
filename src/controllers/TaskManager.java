@@ -27,7 +27,7 @@ public class TaskManager {
     }
 
     //Вызов этого метода нужно перенести в метод “добавление подзадачи”.
-    //в addSubTaskToEpic() тоже "зашито" обновление статуса эпика)
+    //в addSubTaskToEpic() тоже "зашито" обновление статуса эпика :)
     public void createSubTask(SubTask subTask){
         subTaskList.put(subTask.getID(),subTask);
         epicList.get(subTask.getEpicID()).addSubTaskToEpic(subTask);
