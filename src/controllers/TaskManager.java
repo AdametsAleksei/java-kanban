@@ -23,9 +23,11 @@ public class TaskManager {
 
     public void createEpic(Epic epic){
         epicList.put(epic.getID(),epic);
-        epic.updateStatus();
+        epic.setStatus("NEW");
     }
 
+    //Вызов этого метода нужно перенести в метод “добавление подзадачи”.
+    //в addSubTaskToEpic() тоже "зашито" обновление статуса эпика)
     public void createSubTask(SubTask subTask){
         subTaskList.put(subTask.getID(),subTask);
         epicList.get(subTask.getEpicID()).addSubTaskToEpic(subTask);
@@ -52,11 +54,6 @@ public class TaskManager {
         deleteAllSubTask();
     }
 
-    //Привет! Твой комментарий:
-    //"А здесь придётся почистить списки подзадач у каждого Эпика и ещё пересчитать их статусы. "
-    //метод removeTask(), при получении subTask, удаляет subTask из списка подзадач эпика и обновляет статус
-    //Вроде всё корректно работает, или нужно реализовать иначе?
-
     public void deleteAllSubTask(){
         ArrayList<SubTask> deleteList = new ArrayList<>(subTaskList.values());
         for (SubTask subTask : deleteList) {
@@ -76,9 +73,6 @@ public class TaskManager {
         return null;
     }
 
-    //"После удаления подзадачи ещё нужно пересчитать статус Эпика."
-    // В метод removeSubTaskFromEpic "зашито" обновление статуса эпика,
-    // я подумал что вряд ли будет ситуация, когда необходимо удалить subTask и не обновлять статус эпика
     public void removeTask(Task task){
         int taskID = getTaskID(task);
         if (tasksList.containsKey(taskID)){
@@ -108,8 +102,6 @@ public class TaskManager {
         epicList.replace(epicID,newEpic);
     }
 
-    //"И здесь хорошо бы пересчитать статус соответствующего Эпика."
-    // Такая же ситуация как и с удалением subTask, в метод addSubTaskToEpic "зашито" обновление статуса эпика
     public void updateSubTask(int taskID, Epic epic, String name, String description, String status){
         SubTask subTask = new SubTask(name, description, status, taskID, epic.getID());
         epic.removeSubTaskFromEpic(subTaskList.get(taskID));
