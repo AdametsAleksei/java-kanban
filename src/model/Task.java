@@ -1,3 +1,5 @@
+package model;
+
 public class Task {
     protected String name;
     protected String description;
@@ -10,13 +12,14 @@ public class Task {
         this.id = id;
         this.status = status;
     }
+    public Task(){}
 
     public void setStatus(String newStatus){
         this.status = newStatus;
     }
 
-    public int getID(Task task){
-        return task.id;
+    public int getID(){
+        return this.id;
     }
 
     @Override

@@ -1,3 +1,9 @@
+package controllers;
+
+import model.Epic;
+import model.SubTask;
+import model.Task;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -7,51 +13,34 @@ public class TaskManager {
     private HashMap<Integer, SubTask> subTaskList = new HashMap<>();
     private int id = 0;
 
-    private int makeIDTask(){
+    public int makeIDTask(){
         return id +=1;
     }
 
-    public Task createTask(String name, String description, String status){
-        Task task = new Task(name, description, makeIDTask(), status);
-        tasksList.put(task.getID(task),task);
-        return task;
+    public void createTask(Task task){
+        tasksList.put(task.getID(),task);
     }
 
-    public Epic createEpic(String name, String description){
-        Epic epic = new Epic(name, description, makeIDTask(), "NEW");
-        epicList.put(epic.getID(epic),epic);
-        return epic;
+    public void createEpic(Epic epic){
+        epicList.put(epic.getID(),epic);
+        epic.updateStatus();
     }
 
-    public SubTask createSubTask(String name, String description, String status, Epic epic){
-        SubTask subTask = new SubTask(name, description, makeIDTask(), status, epic.getID(epic));
-        subTaskList.put(subTask.getID(subTask),subTask);
-        epic.addSubTaskToEpic(subTask);
-        return subTask;
+    public void createSubTask(SubTask subTask){
+        subTaskList.put(subTask.getID(),subTask);
+        epicList.get(subTask.getEpicID()).addSubTaskToEpic(subTask);
     }
 
     public ArrayList getAllTask(){
-        ArrayList<Task> list = new ArrayList<>();
-        for (Task task: tasksList.values()){
-            list.add(task);
-        }
-        return list;
+        return new ArrayList<>(tasksList.values());
     }
 
     public ArrayList getAllSubTask(){
-        ArrayList<Task> list = new ArrayList<>();
-        for (Task task: subTaskList.values()){
-            list.add(task);
-        }
-        return list;
+        return new ArrayList<>(subTaskList.values());
     }
 
     public ArrayList getAllEpic(){
-        ArrayList<Task> list = new ArrayList<>();
-        for (Task task: epicList.values()){
-            list.add(task);
-        }
-        return list;
+        return new ArrayList<>(epicList.values());
     }
 
     public void deleteAllTask(){
@@ -60,19 +49,23 @@ public class TaskManager {
 
     public void deleteAllEpic(){
         epicList.clear();
+        deleteAllSubTask();
     }
 
+    //Привет! Твой комментарий:
+    //"А здесь придётся почистить списки подзадач у каждого Эпика и ещё пересчитать их статусы. "
+    //метод removeTask(), при получении subTask, удаляет subTask из списка подзадач эпика и обновляет статус
+    //Вроде всё корректно работает, или нужно реализовать иначе?
+
     public void deleteAllSubTask(){
-            for (Task subTask : subTaskList.values()) {
-                if (subTaskList != null) {
-                removeTask(subTask);
-            }
+        ArrayList<SubTask> deleteList = new ArrayList<>(subTaskList.values());
+        for (SubTask subTask : deleteList) {
+            removeTask(subTask);
         }
-        subTaskList.clear();
     }
 
     public Task getTaskFromID(Task task){
-        int taskID = task.getID(task);
+        int taskID = task.getID();
         if (tasksList.containsKey(taskID)){
             return tasksList.get(taskID);
         } else if (epicList.containsKey(taskID)){
@@ -83,6 +76,9 @@ public class TaskManager {
         return null;
     }
 
+    //"После удаления подзадачи ещё нужно пересчитать статус Эпика."
+    // В метод removeSubTaskFromEpic "зашито" обновление статуса эпика,
+    // я подумал что вряд ли будет ситуация, когда необходимо удалить subTask и не обновлять статус эпика
     public void removeTask(Task task){
         int taskID = getTaskID(task);
         if (tasksList.containsKey(taskID)){
@@ -102,8 +98,8 @@ public class TaskManager {
     }
 
     public void updateEpic(int epicID, String name, String description){
-        Epic newEpic = new Epic(name, description, epicID, "NEW");
-        newEpic.updateStatus(newEpic);
+        Epic newEpic = new Epic(name, description, epicID);
+        newEpic.updateStatus();
         for(SubTask subTask : subTaskList.values()){
             if (subTask.getEpicID() == epicID){
                 newEpic.addSubTaskToEpic(subTask);
@@ -112,8 +108,10 @@ public class TaskManager {
         epicList.replace(epicID,newEpic);
     }
 
+    //"И здесь хорошо бы пересчитать статус соответствующего Эпика."
+    // Такая же ситуация как и с удалением subTask, в метод addSubTaskToEpic "зашито" обновление статуса эпика
     public void updateSubTask(int taskID, Epic epic, String name, String description, String status){
-        SubTask subTask = new SubTask(name, description, taskID, status, epic.getID(epic));
+        SubTask subTask = new SubTask(name, description, status, taskID, epic.getID());
         epic.removeSubTaskFromEpic(subTaskList.get(taskID));
         subTaskList.replace(taskID,subTask);
         epic.addSubTaskToEpic(subTask);
@@ -125,7 +123,7 @@ public class TaskManager {
 
     public void setStatusSubTask(SubTask subTask, String newStatus){
         subTask.setStatus(newStatus);
-        epicList.get(subTask.getEpicID()).updateStatus(epicList.get(subTask.getEpicID()));
+        epicList.get(subTask.getEpicID()).updateStatus();
     }
 
     public ArrayList getSubTasksFromEpic(Epic epic){
@@ -133,7 +131,7 @@ public class TaskManager {
     }
 
     public int getTaskID(Task task){
-        return task.getID(task);
+        return task.getID();
     }
 
 }
