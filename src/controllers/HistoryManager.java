@@ -1,12 +1,11 @@
 package controllers;
 
 import model.Task;
-
 import java.util.ArrayList;
 
 public interface HistoryManager {
 
-    ArrayList getHistory();
+    ArrayList<Task> getHistory();
 
-    public void addToHistory(Task task);
+    void addToHistory(Task task);
 }

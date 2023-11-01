@@ -5,11 +5,11 @@ import model.Task;
 import java.util.ArrayList;
 
 public class InMemoryHistoryManager implements HistoryManager{
-    private final ArrayList<Task> history = new ArrayList();
+    private final ArrayList<Task> history = new ArrayList<>();
 
     @Override
-    public ArrayList getHistory() {
-        return new ArrayList(history);
+    public ArrayList<Task> getHistory() {
+        return new ArrayList<>(history);
     }
 
     @Override
