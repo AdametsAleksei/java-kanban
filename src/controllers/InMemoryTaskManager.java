@@ -18,17 +18,19 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Task getTaskFromID(Task task){
-        int taskID = task.getID();
-        if (taskList.containsValue(task)){
+    public Task getTaskFromID(int taskID){
+        if (taskList.containsKey(taskID)){
+            Task task = taskList.get(taskID);
             historyManager.addToHistory(task);
-            return taskList.get(taskID);
-        } else if (epicList.containsValue(task)){
-            historyManager.addToHistory(task);
-            return epicList.get(taskID);
-        } else if (subTaskList.containsValue(task)){
-            historyManager.addToHistory(task);
-            return subTaskList.get(taskID);
+            return task;
+        } else if (epicList.containsKey(taskID)){
+            Epic epic = epicList.get(taskID);
+            historyManager.addToHistory(epic);
+            return epic;
+        } else if (subTaskList.containsKey(taskID)){
+            SubTask subTask = subTaskList.get(taskID);
+            historyManager.addToHistory(subTask);
+            return subTask;
         }
         return null;
     }
@@ -38,34 +40,27 @@ public class InMemoryTaskManager implements TaskManager {
         return id +=1;
     }
 
-    /*Привет! Тут у меня вопрос возник)
-    Твой комментарий:
-    "Здесь и для других типов задач тоже.
-    Идентификатор не передается от пользователя, но, даже, если передается, мы его не должны учитывать, а он должен
-    быть переопределен в любом случае для поддержания уникальности."
-
-    Вопрос:
-    У меня при создании задачи или задач другого типа, в методе main вызывается makeIDTask():
-    Task task1 = new Task("Task 1", "Description for Task 1", manager.makeIDTask(), Status.NEW);
-    который, отвечает как раз за поддержание уникальности, и как я себе это представляю, не передаётся от пользователя
-    (вопрос как выглядит пользовательский интерфейс :))
-    Или я не совсем правильно представляю и нужно поправить?
-    */
     @Override
-    public void createTask(Task task){
+    public Task createTask(String name, String description, Status status){
+        Task task = new Task(name, description, makeIDTask(), status);
         taskList.put(task.getID(),task);
+        return task;
     }
 
     @Override
-    public void createEpic(Epic epic){
+    public Epic createEpic(String name, String description){
+        Epic epic = new Epic(name, description, makeIDTask());
         epicList.put(epic.getID(),epic);
         epic.setStatus(Status.NEW);
+        return epic;
     }
 
     @Override
-    public void createSubTask(SubTask subTask){
+    public SubTask createSubTask(String name, String description,Status status, int epicID){
+        SubTask subTask = new SubTask(name, description, status, makeIDTask(), epicID);
         subTaskList.put(subTask.getID(),subTask);
         epicList.get(subTask.getEpicID()).addSubTaskToEpic(subTask);
+        return subTask;
     }
 
     @Override
@@ -102,7 +97,6 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    //Извиняюсь, недоглядел
     @Override
     public void removeTask(Task task){
         int taskID = getTaskID(task);

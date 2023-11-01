@@ -9,11 +9,11 @@ public interface TaskManager {
 
     int makeIDTask();
 
-    void createTask(Task task);
+    Task createTask(String name, String description, Status status);
 
-    void createEpic(Epic epic);
+    Epic createEpic(String name, String description);
 
-    void createSubTask(SubTask subTask);
+    SubTask createSubTask(String name, String description, Status status, int epicID);
 
     ArrayList<Task> getAllTask();
 
@@ -27,7 +27,7 @@ public interface TaskManager {
 
     void deleteAllSubTask();
 
-    Task getTaskFromID(Task task);
+    Task getTaskFromID(int taskID);
 
     void removeTask(Task task);
 
