@@ -13,8 +13,6 @@ public class Task {
         this.status = status;
     }
 
-    public Task(){}
-
     public void setStatus(Status newStatus){
         this.status = newStatus;
     }

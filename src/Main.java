@@ -55,7 +55,7 @@ public class Main {
         manager.getTaskFromID(task1);
         manager.getTaskFromID(epic1);
         manager.getTaskFromID(task1);
-        manager.getTaskFromID(epic1);
+        //manager.getTaskFromID(epic1);
         //manager.getTaskFromID(task1);
         System.out.println(manager.getHistory());
     }
