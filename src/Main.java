@@ -4,7 +4,7 @@ import model.*;
 public class Main {
 
     public static void main(String[] args) {
-        TaskManager manager = new Managers().getDefault();
+        TaskManager manager = Managers.getDefault();
         //Создайте 2 задачи, один эпик с 2 подзадачами, а другой эпик с 1 подзадачей.
         Task task1 = new Task("Task 1", "Description for Task 1",
                 manager.makeIDTask(), Status.NEW);
