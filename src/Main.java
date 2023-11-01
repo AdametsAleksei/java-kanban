@@ -28,12 +28,13 @@ public class Main {
                 manager.makeIDTask(), epic2.getID());
         manager.createSubTask(subTask3);
 
-        /*//Распечатайте списки эпиков, задач и подзадач
+        /*
+        //Распечатайте списки эпиков, задач и подзадач
         System.out.println(inMemoryTaskManager.getAllEpic());
         System.out.println(inMemoryTaskManager.getAllTask());
         System.out.println(inMemoryTaskManager.getAllSubTask());
         //Измените статусы созданных объектов, распечатайте. Проверьте, что статус задачи и подзадачи сохранился,
-        // а статус эпика рассчитался по статусам подзадач.
+        //а статус эпика рассчитался по статусам подзадач.
         System.out.println(task1);
         inMemoryTaskManager.setStatusTask(task1,"IN_PROGRESS");
         System.out.println(task1);
@@ -41,7 +42,8 @@ public class Main {
         System.out.println(subTask3);
         inMemoryTaskManager.setStatusSubTask(subTask3,"DONE");
         System.out.println(epic2);
-        System.out.println(subTask3);*/
+        System.out.println(subTask3);
+        */
 
         manager.getTaskFromID(epic1);
         manager.getTaskFromID(subTask1);
@@ -53,7 +55,7 @@ public class Main {
         manager.getTaskFromID(task1);
         manager.getTaskFromID(epic1);
         manager.getTaskFromID(task1);
-        //manager.getTaskFromID(epic1);
+        manager.getTaskFromID(epic1);
         //manager.getTaskFromID(task1);
         System.out.println(manager.getHistory());
     }

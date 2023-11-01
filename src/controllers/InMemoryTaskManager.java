@@ -20,12 +20,14 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task getTaskFromID(Task task){
         int taskID = task.getID();
-        historyManager.addToHistory(task);
-        if (tasksList.containsKey(taskID)){
+        if (task instanceof Task){
+            historyManager.addToHistory(task);
             return tasksList.get(taskID);
-        } else if (epicList.containsKey(taskID)){
+        } else if (task instanceof Epic){
+            historyManager.addToHistory(task);
             return epicList.get(taskID);
-        } else if (subTaskList.containsKey(taskID)){
+        } else if (task instanceof SubTask){
+            historyManager.addToHistory(task);
             return subTaskList.get(taskID);
         }
         return null;
@@ -36,7 +38,20 @@ public class InMemoryTaskManager implements TaskManager {
         return id +=1;
     }
 
+    /*Привет! Тут у меня вопрос возник)
+    Твой комментарий:
+    "Здесь и для других типов задач тоже.
+    Идентификатор не передается от пользователя, но, даже, если передается, мы его не должны учитывать, а он должен
+    быть переопределен в любом случае для поддержания уникальности."
 
+    Вопрос:
+    У меня при создании задачи или другого типа, в методе main вызывается makeIDTask():
+    Task task1 = new Task("Task 1", "Description for Task 1", manager.makeIDTask(), Status.NEW);
+
+    который, отвечает как раз за поддержание уникальности, и как я себе это представляю, не передаётся от пользователя
+    (вопрос как выглядит пользовательский интерфейс :))
+    Или я не совсем правильно представляю и нужно поправить?
+    */
     @Override
     public void createTask(Task task){
         tasksList.put(task.getID(),task);
