@@ -4,31 +4,31 @@ import model.*;
 public class Main {
 
     public static void main(String[] args) {
-        InMemoryTaskManager inMemoryTaskManager = new InMemoryTaskManager();
+        TaskManager manager = new Managers().getDefault();
         //Создайте 2 задачи, один эпик с 2 подзадачами, а другой эпик с 1 подзадачей.
         Task task1 = new Task("Task 1", "Description for Task 1",
-                inMemoryTaskManager.makeIDTask(), "NEW");
-        inMemoryTaskManager.createTask(task1);
+                manager.makeIDTask(), Status.NEW);
+        manager.createTask(task1);
         Task task2 = new Task("Task 2", "Description for Task 2",
-                inMemoryTaskManager.makeIDTask(), "DONE");
-        inMemoryTaskManager.createTask(task2);
+                manager.makeIDTask(), Status.DONE);
+        manager.createTask(task2);
         Epic epic1 = new Epic("Epic 1", "Description for Epic 1",
-                inMemoryTaskManager.makeIDTask());
-        inMemoryTaskManager.createEpic(epic1);
-        SubTask subTask1 = new SubTask("SubTask 1", "SubTask 1 for Epic 1", "IN_PROGRESS",
-                inMemoryTaskManager.makeIDTask(), epic1.getID());
-        inMemoryTaskManager.createSubTask(subTask1);
-        SubTask subTask2 = new SubTask("SubTask 2", "SubTask 2 for Epic 1", "DONE",
-                inMemoryTaskManager.makeIDTask(), epic1.getID());
-        inMemoryTaskManager.createSubTask(subTask2);
+                manager.makeIDTask());
+        manager.createEpic(epic1);
+        SubTask subTask1 = new SubTask("SubTask 1", "SubTask 1 for Epic 1", Status.IN_PROGRESS,
+                manager.makeIDTask(), epic1.getID());
+        manager.createSubTask(subTask1);
+        SubTask subTask2 = new SubTask("SubTask 2", "SubTask 2 for Epic 1", Status.DONE,
+                manager.makeIDTask(), epic1.getID());
+        manager.createSubTask(subTask2);
         Epic epic2 = new Epic("Epic 2", "Description for Epic 2",
-                inMemoryTaskManager.makeIDTask());
-        inMemoryTaskManager.createEpic(epic2);
-        SubTask subTask3 = new SubTask("SubTask 3", "SubTask 3 for Epic 2", "IN_PROGRESS",
-                inMemoryTaskManager.makeIDTask(), epic2.getID());
-        inMemoryTaskManager.createSubTask(subTask3);
+                manager.makeIDTask());
+        manager.createEpic(epic2);
+        SubTask subTask3 = new SubTask("SubTask 3", "SubTask 3 for Epic 2", Status.IN_PROGRESS,
+                manager.makeIDTask(), epic2.getID());
+        manager.createSubTask(subTask3);
 
-        //Распечатайте списки эпиков, задач и подзадач
+        /*//Распечатайте списки эпиков, задач и подзадач
         System.out.println(inMemoryTaskManager.getAllEpic());
         System.out.println(inMemoryTaskManager.getAllTask());
         System.out.println(inMemoryTaskManager.getAllSubTask());
@@ -41,6 +41,20 @@ public class Main {
         System.out.println(subTask3);
         inMemoryTaskManager.setStatusSubTask(subTask3,"DONE");
         System.out.println(epic2);
-        System.out.println(subTask3);
+        System.out.println(subTask3);*/
+
+        manager.getTaskFromID(epic1);
+        manager.getTaskFromID(subTask1);
+        manager.getTaskFromID(task2);
+        manager.getTaskFromID(epic1);
+        manager.getTaskFromID(epic1);
+        manager.getTaskFromID(epic1);
+        manager.getTaskFromID(epic1);
+        manager.getTaskFromID(task1);
+        manager.getTaskFromID(epic1);
+        manager.getTaskFromID(task1);
+        //manager.getTaskFromID(epic1);
+        //manager.getTaskFromID(task1);
+        System.out.println(manager.getHistory());
     }
 }
