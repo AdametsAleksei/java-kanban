@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class InMemoryTaskManager implements TaskManager {
-    private final HashMap<Integer, Task> tasksList = new HashMap<>();
+    private final HashMap<Integer, Task> taskList = new HashMap<>();
     private final HashMap<Integer, Epic> epicList = new HashMap<>();
     private final HashMap<Integer, SubTask> subTaskList = new HashMap<>();
     private int id = 0;
@@ -20,13 +20,13 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task getTaskFromID(Task task){
         int taskID = task.getID();
-        if (task instanceof Task){
+        if (taskList.containsValue(task)){
             historyManager.addToHistory(task);
-            return tasksList.get(taskID);
-        } else if (task instanceof Epic){
+            return taskList.get(taskID);
+        } else if (epicList.containsValue(task)){
             historyManager.addToHistory(task);
             return epicList.get(taskID);
-        } else if (task instanceof SubTask){
+        } else if (subTaskList.containsValue(task)){
             historyManager.addToHistory(task);
             return subTaskList.get(taskID);
         }
@@ -53,7 +53,7 @@ public class InMemoryTaskManager implements TaskManager {
     */
     @Override
     public void createTask(Task task){
-        tasksList.put(task.getID(),task);
+        taskList.put(task.getID(),task);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public ArrayList<Task> getAllTask(){
-        return new ArrayList<>(tasksList.values());
+        return new ArrayList<>(taskList.values());
     }
 
     @Override
@@ -85,7 +85,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteAllTask(){
-        tasksList.clear();
+        taskList.clear();
     }
 
     @Override
@@ -106,8 +106,8 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void removeTask(Task task){
         int taskID = getTaskID(task);
-        if (tasksList.containsKey(taskID)){
-            tasksList.remove(taskID);
+        if (taskList.containsKey(taskID)){
+            taskList.remove(taskID);
         } else if (epicList.containsKey(taskID)){
             epicList.remove(taskID);
         } else if (subTaskList.containsKey(taskID)){
@@ -120,7 +120,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void updateTask(int taskID, String name, String description, Status status){
         Task newTask = new Task(name, description, taskID, status);
-        tasksList.replace(taskID,newTask);
+        taskList.replace(taskID,newTask);
     }
 
     @Override
