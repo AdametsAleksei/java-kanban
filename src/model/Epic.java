@@ -3,7 +3,7 @@ package model;
 import java.util.ArrayList;
 
 public class Epic extends Task {
-    private ArrayList<SubTask> listSubTasks;
+    private ArrayList<Task> listSubTasks;
 
     public Epic(String taskName, String description, int id) {
         super.name = taskName;
@@ -22,8 +22,8 @@ public class Epic extends Task {
         updateStatus();
     }
 
-    public ArrayList getListSubTasks(){
-        return (ArrayList<SubTask>) listSubTasks.clone();
+    public ArrayList<Task> getListSubTasks(){
+        return (ArrayList<Task>) listSubTasks.clone();
     }
 
     public void updateStatus(){
