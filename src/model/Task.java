@@ -12,6 +12,7 @@ public class Task {
         this.id = id;
         this.status = status;
     }
+
     public Task(){}
 
     public void setStatus(Status newStatus){
