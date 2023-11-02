@@ -1,7 +1,7 @@
 import controllers.*;
 import model.*;
 
-// Спасибо за развернутый комментарий, вроде всё понял :)
+// Перечитал ТЗ-3, переделал методы создания и обновления задач, теперь объект передается в качестве параметра
 
 public class Main {
 
@@ -26,7 +26,7 @@ public class Main {
                 Status.NEW, epic2.getID());
         manager.createSubTask(subTask3);
 
-        /* ТЗ - 3 (предыдущее)
+        /*ТЗ - 3 (предыдущее)
         //Распечатайте списки эпиков, задач и подзадач
         System.out.println(manager.getAllEpic());
         System.out.println(manager.getAllTask());
@@ -41,10 +41,15 @@ public class Main {
         manager.setStatusSubTask(subTask3,Status.DONE);
         System.out.println(epic2);
         System.out.println(subTask3);
-        manager.updateTask(task1.getID(),"Task Update", "A",Status.IN_PROGRESS);
+        System.out.println(manager.getTaskFromID(task1.getID()));
+        manager.createEpic(epic2);
+        System.out.println(manager.getTaskFromID(subTask3.getID()));
+        SubTask updateSubTask = new SubTask("Subtask Update", "Description for Epic 2", Status.DONE,subTask3.getEpicID());
+        manager.updateSubTask(subTask3.getID(), updateSubTask);
+        System.out.println(manager.getTaskFromID(updateSubTask.getID()));
         */
 
-        /*//ТЗ - 4 (текущее)
+        //ТЗ - 4 (текущее)
         manager.getTaskFromID(epic1.getID());
         manager.getTaskFromID(subTask1.getID());
         manager.getTaskFromID(task2.getID());
@@ -55,9 +60,9 @@ public class Main {
         manager.getTaskFromID(task1.getID());
         manager.getTaskFromID(epic1.getID());
         manager.getTaskFromID(task1.getID());
-        manager.getTaskFromID(epic1.getID());
+        //manager.getTaskFromID(epic1.getID());
         //manager.getTaskFromID(task1.getID());
         System.out.println(manager.getHistory());
-        */
+
     }
 }

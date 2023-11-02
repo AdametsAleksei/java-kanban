@@ -31,11 +31,11 @@ public interface TaskManager {
 
     void removeTask(Task task);
 
-    void updateTask(int taskID, String name, String description, Status status);
+    void updateTask(int taskID, Task newTask);
 
-    void updateEpic(int epicID, String name, String description);
+    void updateEpic(int epicID, Epic newEpic);
 
-    void updateSubTask(int taskID, Epic epic, String name, String description, Status status);
+    void updateSubTask(int taskID, SubTask newSubtask);
 
     void setStatusTask(Task task, Status newStatus);
 

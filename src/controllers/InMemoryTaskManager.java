@@ -109,15 +109,13 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void updateTask(int taskID, String name, String description, Status status){
-        Task newTask = new Task(name, description, status);
+    public void updateTask(int taskID, Task newTask){
         newTask.setID(taskID);
         taskList.replace(taskID,newTask);
     }
 
     @Override
-    public void updateEpic(int epicID, String name, String description){
-        Epic newEpic = new Epic(name, description);
+    public void updateEpic(int epicID, Epic newEpic){
         newEpic.setID(epicID);
         newEpic.updateStatus();
         for(SubTask subTask : subTaskList.values()){
@@ -129,9 +127,9 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void updateSubTask(int taskID, Epic epic, String name, String description, Status status){
-        SubTask newSubTask = new SubTask(name, description, status, epic.getID());
+    public void updateSubTask(int taskID, SubTask newSubTask){
         newSubTask.setID(taskID);
+        Epic epic = epicList.get(newSubTask.getEpicID());
         epic.removeSubTaskFromEpic(subTaskList.get(taskID));
         subTaskList.replace(taskID,newSubTask);
         epic.addSubTaskToEpic(newSubTask);
