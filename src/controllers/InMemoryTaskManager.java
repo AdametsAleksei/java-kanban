@@ -41,26 +41,23 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Task createTask(String name, String description, Status status){
-        Task task = new Task(name, description, makeIDTask(), status);
+    public void createTask(Task task){
+        task.setID(makeIDTask());
         taskList.put(task.getID(),task);
-        return task;
     }
 
     @Override
-    public Epic createEpic(String name, String description){
-        Epic epic = new Epic(name, description, makeIDTask());
+    public void createEpic(Epic epic){
+        epic.setID(makeIDTask());
         epicList.put(epic.getID(),epic);
         epic.setStatus(Status.NEW);
-        return epic;
     }
 
     @Override
-    public SubTask createSubTask(String name, String description,Status status, int epicID){
-        SubTask subTask = new SubTask(name, description, status, makeIDTask(), epicID);
+    public void createSubTask(SubTask subTask){
+        subTask.setID(makeIDTask());
         subTaskList.put(subTask.getID(),subTask);
         epicList.get(subTask.getEpicID()).addSubTaskToEpic(subTask);
-        return subTask;
     }
 
     @Override
@@ -113,13 +110,15 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateTask(int taskID, String name, String description, Status status){
-        Task newTask = new Task(name, description, taskID, status);
+        Task newTask = new Task(name, description, status);
+        newTask.setID(taskID);
         taskList.replace(taskID,newTask);
     }
 
     @Override
     public void updateEpic(int epicID, String name, String description){
-        Epic newEpic = new Epic(name, description, epicID);
+        Epic newEpic = new Epic(name, description);
+        newEpic.setID(epicID);
         newEpic.updateStatus();
         for(SubTask subTask : subTaskList.values()){
             if (subTask.getEpicID() == epicID){
@@ -131,10 +130,11 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateSubTask(int taskID, Epic epic, String name, String description, Status status){
-        SubTask subTask = new SubTask(name, description, status, taskID, epic.getID());
+        SubTask newSubTask = new SubTask(name, description, status, epic.getID());
+        newSubTask.setID(taskID);
         epic.removeSubTaskFromEpic(subTaskList.get(taskID));
-        subTaskList.replace(taskID,subTask);
-        epic.addSubTaskToEpic(subTask);
+        subTaskList.replace(taskID,newSubTask);
+        epic.addSubTaskToEpic(newSubTask);
     }
 
     @Override

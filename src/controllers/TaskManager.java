@@ -9,11 +9,11 @@ public interface TaskManager {
 
     int makeIDTask();
 
-    Task createTask(String name, String description, Status status);
+    void createTask(Task task);
 
-    Epic createEpic(String name, String description);
+    void createEpic(Epic epic);
 
-    SubTask createSubTask(String name, String description, Status status, int epicID);
+    void createSubTask(SubTask subTask);
 
     ArrayList<Task> getAllTask();
 
