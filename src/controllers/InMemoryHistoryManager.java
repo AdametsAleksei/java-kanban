@@ -1,7 +1,6 @@
 package controllers;
 
 import model.Task;
-
 import java.util.ArrayList;
 
 public class InMemoryHistoryManager implements HistoryManager{
