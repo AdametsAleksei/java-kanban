@@ -25,29 +25,6 @@ public class Main {
                 Status.NEW, epic2.getID());
         manager.createSubTask(subTask3);
 
-        /*ТЗ - 3 (предыдущее)
-        //Распечатайте списки эпиков, задач и подзадач
-        System.out.println(manager.getAllEpic());
-        System.out.println(manager.getAllTask());
-        System.out.println(manager.getAllSubTask());
-        //Измените статусы созданных объектов, распечатайте. Проверьте, что статус задачи и подзадачи сохранился,
-        //а статус эпика рассчитался по статусам подзадач.
-        System.out.println(task1);
-        manager.setStatusTask(task1,Status.DONE);
-        System.out.println(task1);
-        System.out.println(epic2);
-        System.out.println(subTask3);
-        manager.setStatusSubTask(subTask3,Status.DONE);
-        System.out.println(epic2);
-        System.out.println(subTask3);
-        System.out.println(manager.getTaskFromID(task1.getID()));
-        manager.createEpic(epic2);
-        System.out.println(manager.getTaskFromID(subTask3.getID()));
-        SubTask updateSubTask = new SubTask("Subtask Update", "Description for Epic 2", Status.DONE,subTask3.getEpicID());
-        manager.updateSubTask(subTask3.getID(), updateSubTask);
-        System.out.println(manager.getTaskFromID(updateSubTask.getID()));
-        */
-
         //ТЗ - 4 (текущее)
         manager.getTaskFromID(epic1.getID());
         manager.getTaskFromID(subTask1.getID());

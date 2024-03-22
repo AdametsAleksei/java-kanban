@@ -25,15 +25,14 @@ public class Epic extends Task {
     }
 
     public void updateStatus(){
-        Status newStatus = null;
         int newSum = 0;
         int doneSum = 0;
         if (listSubTasks.isEmpty()){
-            newStatus = Status.NEW;
+            this.status = Status.NEW;
         } else {
             for (Task subTask : listSubTasks) {
                 if (subTask.status.equals(Status.IN_PROGRESS)) {
-                    newStatus = Status.IN_PROGRESS;
+                    this.status = Status.IN_PROGRESS;
                     break;
                 } else {
                     if (subTask.status.equals(Status.NEW)) {
@@ -42,14 +41,17 @@ public class Epic extends Task {
                         doneSum++;
                     }
                     if (newSum == listSubTasks.size()) {
-                        newStatus = Status.NEW;
+                        this.status = Status.NEW;
+                        break;
                     } else if (doneSum == listSubTasks.size()) {
-                        newStatus = Status.DONE;
+                        this.status = Status.DONE;
+                        break;
+                    } else {
+                        this.status = Status.IN_PROGRESS;
                     }
                 }
             }
         }
-        this.status = newStatus;
     }
 
 

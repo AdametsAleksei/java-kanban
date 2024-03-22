@@ -24,6 +24,20 @@ public class Task {
         return this.id;
     }
 
+    public String getName() {return this.name;}
+
+    public String getDescription() {return this.description;}
+
+    public Status getStatus() {return this.status;}
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (this.getClass() != obj.getClass()) return false;
+        return this.id == ((Task) obj).id;
+    }
+
     @Override
     public String toString() {
         return "Task{" +
