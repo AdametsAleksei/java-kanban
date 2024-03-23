@@ -1,6 +1,5 @@
 package test;
 
-import controllers.InMemoryHistoryManager;
 import controllers.InMemoryTaskManager;
 
 import model.Epic;
@@ -9,8 +8,6 @@ import model.SubTask;
 import model.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
