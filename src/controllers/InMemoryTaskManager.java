@@ -77,20 +77,33 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteAllTask(){
-        taskList.clear();
+        if (!taskList.isEmpty()) {
+            for (Task task : taskList.values()) {
+                historyManager.remove(task.getID());
+            }
+            taskList.clear();
+        }
     }
 
     @Override
     public void deleteAllEpic(){
-        epicList.clear();
-        deleteAllSubTask();
+        if (!epicList.isEmpty()) {
+            for (Task task : epicList.values()){
+                historyManager.remove(task.getID());
+            }
+            epicList.clear();
+            deleteAllSubTask();
+        }
     }
 
     @Override
     public void deleteAllSubTask(){
-        ArrayList<SubTask> deleteList = new ArrayList<>(subTaskList.values());
-        for (SubTask subTask : deleteList) {
-            removeTask(subTask);
+        if (!subTaskList.isEmpty()) {
+            ArrayList<SubTask> deleteList = new ArrayList<>(subTaskList.values());
+            for (SubTask subTask : deleteList) {
+                removeTask(subTask);
+                historyManager.remove(subTask.getID());
+            }
         }
     }
 
@@ -99,12 +112,24 @@ public class InMemoryTaskManager implements TaskManager {
         int taskID = getTaskID(task);
         if (taskList.containsKey(taskID)){
             taskList.remove(taskID);
+            historyManager.remove(taskID);
         } else if (epicList.containsKey(taskID)){
+            if (!subTaskList.isEmpty()) {
+                ArrayList<SubTask> deleteList = new ArrayList<>(subTaskList.values());
+                for (SubTask subTask : deleteList) {
+                    if (subTask.getEpicID() == taskID) {
+                        removeTask(subTask);
+                        historyManager.remove(subTask.getID());
+                    }
+                }
+            }
             epicList.remove(taskID);
+            historyManager.remove(taskID);
         } else if (subTaskList.containsKey(taskID)){
             Epic epic = epicList.get(subTaskList.get(taskID).getEpicID());
             epic.removeSubTaskFromEpic(subTaskList.get(taskID));
             subTaskList.remove(taskID);
+            historyManager.remove(taskID);
         }
     }
 
