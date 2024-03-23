@@ -19,7 +19,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void subTaskShouldBeUpdated(){
+    public void subTaskShouldBeUpdated() {
         Epic epic1 = new Epic("Epic 1", "Description for Epic 1");
         manager.createEpic(epic1);
         SubTask subTask1 = new SubTask("SubTask 1", "SubTask 1 for Epic 1",
@@ -35,7 +35,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void epicShouldBeUpdated(){
+    public void epicShouldBeUpdated() {
         Epic epic1 = new Epic("Epic 1", "Description for Epic 1");
         manager.createEpic(epic1);
         Epic updateEpic = new Epic("EpicUpdate", "Description for UpdateEpic");
@@ -48,7 +48,7 @@ class InMemoryTaskManagerTest {
 
 
     @Test
-    public void taskShouldBeUpdated(){
+    public void taskShouldBeUpdated() {
         Task task1 = new Task("Task 1", "Description for Task 1", Status.NEW);
         manager.createTask(task1);
         Task updateTask = new Task("TaskUpdate", "Description for UpdateTask", Status.IN_PROGRESS);
@@ -60,7 +60,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void listSubTaskShouldBeEmptyWhenAllSubTaskDeleted(){
+    public void listSubTaskShouldBeEmptyWhenAllSubTaskDeleted() {
         Epic epic1 = new Epic("Epic 1", "Description for Epic 1");
         manager.createEpic(epic1);
         SubTask subTask1 = new SubTask("SubTask 1", "SubTask 1 for Epic 1",
@@ -74,7 +74,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void listEpicAndSubTaskShouldBeEmptyWhenAllEpicDeleted(){
+    public void listEpicAndSubTaskShouldBeEmptyWhenAllEpicDeleted() {
         Epic epic1 = new Epic("Epic 1", "Description for Epic 1");
         manager.createEpic(epic1);
         manager.deleteAllEpic();
@@ -83,7 +83,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void listTaskShouldBeEmptyWhenAllTaskDeleted(){
+    public void listTaskShouldBeEmptyWhenAllTaskDeleted() {
         Task task1 = new Task("Task 1", "Description for Task 1", Status.NEW);
         manager.createTask(task1);
         Task task2 = new Task("Task 2", "Description for Task 2", Status.DONE);
@@ -93,14 +93,14 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void sumEpicShouldBeEqual(){
+    public void sumEpicShouldBeEqual() {
         Epic epic1 = new Epic("Epic 1", "Description for Epic 1");
         manager.createEpic(epic1);
         assertEquals(1, manager.getAllEpic().size());
     }
 
     @Test
-    public void sumSubTaskShouldBeEqual(){
+    public void sumSubTaskShouldBeEqual() {
         Epic epic1 = new Epic("Epic 1", "Description for Epic 1");
         manager.createEpic(epic1);
         SubTask subTask1 = new SubTask("SubTask 1", "SubTask 1 for Epic 1",
@@ -113,7 +113,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void sumTaskShouldBeEqual(){
+    public void sumTaskShouldBeEqual() {
         Task task1 = new Task("Task 1", "Description for Task 1", Status.NEW);
         manager.createTask(task1);
         Task task2 = new Task("Task 2", "Description for Task 2", Status.DONE);
@@ -122,7 +122,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void statusSubTaskShouldBeChanged(){
+    public void statusSubTaskShouldBeChanged() {
         Epic epic1 = new Epic("Epic 1", "Description for Epic 1");
         manager.createEpic(epic1);
         SubTask subTask1 = new SubTask("SubTask 1", "SubTask 1 for Epic 1",
@@ -133,7 +133,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void statusEpicShouldBeNewWhenDeletedAllSubTask(){
+    public void statusEpicShouldBeNewWhenDeletedAllSubTask() {
         Epic epic1 = new Epic("Epic 1", "Description for Epic 1");
         manager.createEpic(epic1);
         SubTask subTask1 = new SubTask("SubTask 1", "SubTask 1 for Epic 1",
@@ -147,7 +147,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void statusEpicShouldBeNewWhenStatusAllSubTaskNew(){
+    public void statusEpicShouldBeNewWhenStatusAllSubTaskNew() {
         Epic epic1 = new Epic("Epic 1", "Description for Epic 1");
         manager.createEpic(epic1);
         SubTask subTask1 = new SubTask("SubTask 1", "SubTask 1 for Epic 1",
@@ -160,7 +160,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void statusEpicShouldBeInProgressWhenStatusAllSubTaskNotDoneAndNotNew(){
+    public void statusEpicShouldBeInProgressWhenStatusAllSubTaskNotDoneAndNotNew() {
         Epic epic1 = new Epic("Epic 1", "Description for Epic 1");
         manager.createEpic(epic1);
         SubTask subTask1 = new SubTask("SubTask 1", "SubTask 1 for Epic 1",
@@ -173,7 +173,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void statusEpicShouldBeDoneWhenStatusAllSubTaskDone(){
+    public void statusEpicShouldBeDoneWhenStatusAllSubTaskDone() {
         Epic epic1 = new Epic("Epic 1", "Description for Epic 1");
         manager.createEpic(epic1);
         SubTask subTask1 = new SubTask("SubTask 1", "SubTask 1 for Epic 1",
@@ -186,14 +186,14 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void statusShouldBeNewWhenEpicCreated(){
+    public void statusShouldBeNewWhenEpicCreated() {
         Epic epic1 = new Epic("Epic 1", "Description for Epic 1");
         manager.createEpic(epic1);
         assertEquals(Status.NEW, manager.getTaskFromID(manager.getTaskID(epic1)).getStatus());
     }
 
     @Test
-    public void statusTaskShouldBeChanged(){
+    public void statusTaskShouldBeChanged() {
         Task task1 = new Task("Task 1", "Description for Task 1", Status.NEW);
         manager.createTask(task1);
         Status newStatus = Status.DONE;
@@ -202,7 +202,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void allFieldsShouldBeEqualWhenSubTaskCreatedByInMemoryTaskManager(){
+    public void allFieldsShouldBeEqualWhenSubTaskCreatedByInMemoryTaskManager() {
         String nameEpic = "Epic 1";
         String descriptionEpic = "Description for Epic 1";
         Epic epic1 = new Epic(nameEpic, descriptionEpic);
@@ -219,7 +219,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void allFieldsShouldBeEqualWhenEpicCreatedByInMemoryTaskManager(){
+    public void allFieldsShouldBeEqualWhenEpicCreatedByInMemoryTaskManager() {
         String name = "Epic 1";
         String description = "Description for Epic 1";
         Epic epic1 = new Epic(name, description);
@@ -229,7 +229,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void allFieldsShouldBeEqualWhenTaskCreatedByInMemoryTaskManager(){
+    public void allFieldsShouldBeEqualWhenTaskCreatedByInMemoryTaskManager() {
         String name = "Task 1";
         String description = "Description for Task 1";
         Status status = Status.NEW;
@@ -241,7 +241,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void shouldBeCreatedSubTaskAndFindByID(){
+    public void shouldBeCreatedSubTaskAndFindByID() {
         Epic epic1 = new Epic("Epic 1", "Description for Epic 1");
         manager.createEpic(epic1);
         SubTask subTask1 = new SubTask("SubTask 1", "SubTask 1 for Epic 1",
@@ -251,31 +251,31 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void shouldBeCreatedEpicAndFindByID(){
+    public void shouldBeCreatedEpicAndFindByID() {
         Epic epic1 = new Epic("Epic 1", "Description for Epic 1");
         manager.createEpic(epic1);
         assertEquals(epic1.getID(), manager.getTaskID(epic1));
     }
 
     @Test
-    public void shouldBeCreatedTaskAndFindByID(){
+    public void shouldBeCreatedTaskAndFindByID() {
         Task task1 = new Task("Task 1", "Description for Task 1", Status.NEW);
         manager.createTask(task1);
         assertEquals(task1.getID(), manager.getTaskID(task1));
     }
 
     @Test
-    public void shouldBeReturnedEmptyListWhenEpicNotCreated(){
+    public void shouldBeReturnedEmptyListWhenEpicNotCreated() {
         assertTrue(manager.getAllEpic().isEmpty());
     }
 
     @Test
-    public void shouldBeReturnedEmptyListWhenSubTaskNotCreated(){
+    public void shouldBeReturnedEmptyListWhenSubTaskNotCreated() {
         assertTrue(manager.getAllSubTask().isEmpty());
     }
 
     @Test
-    public void shouldBeReturnedEmptyListWhenTaskNotCreated(){
+    public void shouldBeReturnedEmptyListWhenTaskNotCreated() {
         assertTrue(manager.getAllTask().isEmpty());
     }
 

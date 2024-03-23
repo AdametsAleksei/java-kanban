@@ -1,8 +1,8 @@
 package model;
 
 public class Task {
-    protected String name;
-    protected String description;
+    protected final String name;
+    protected final String description;
     protected int id;
     protected Status status;
 
@@ -12,23 +12,29 @@ public class Task {
         this.status = status;
     }
 
-    public void setID(int id){
+    public void setID(int id) {
         this.id = id;
     }
 
-    public void setStatus(Status newStatus){
+    public void setStatus(Status newStatus) {
         this.status = newStatus;
     }
 
-    public int getID(){
+    public int getID() {
         return this.id;
     }
 
-    public String getName() {return this.name;}
+    public String getName() {
+        return this.name;
+    }
 
-    public String getDescription() {return this.description;}
+    public String getDescription() {
+        return this.description;
+    }
 
-    public Status getStatus() {return this.status;}
+    public Status getStatus() {
+        return this.status;
+    }
 
     @Override
     public boolean equals(Object obj) {

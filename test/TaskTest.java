@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class TaskTest {
 
     @Test
-    public void shouldBeEqualsWhenTaskIDEquals(){
+    public void shouldBeEqualsWhenTaskIDEquals() {
         Task task1 = new Task("Task1", "Task1", Status.NEW);
         Task task2 = new Task("Task1", "Task1", Status.NEW);
         task2.setID(task1.getID());

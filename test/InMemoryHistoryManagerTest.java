@@ -15,12 +15,12 @@ class InMemoryHistoryManagerTest {
     static InMemoryTaskManager manager;
 
     @BeforeEach
-    public void createManager(){
+    public void createManager() {
         manager = new InMemoryTaskManager();
     }
 
     @Test
-    public void ifThreeTaskReceivedSeveralTimesHistoryListShouldBeContainThreeRecordInRightOrder(){
+    public void ifThreeTaskReceivedSeveralTimesHistoryListShouldBeContainThreeRecordInRightOrder() {
         Epic epic1 = new Epic("Epic 1", "Description for Epic 1");
         manager.createEpic(epic1);
         SubTask subTask1 = new SubTask("SubTask 1", "SubTask 1 for Epic 1",
@@ -40,8 +40,9 @@ class InMemoryHistoryManagerTest {
         rightOrderList.add(task1);
         assertEquals(rightOrderList, manager.getHistory());
     }
+
     @Test
-    public void ifTwoTaskReceivedSeveralTimesHistoryListShouldBeContainTwoRecordInRightOrder(){
+    public void ifTwoTaskReceivedSeveralTimesHistoryListShouldBeContainTwoRecordInRightOrder() {
         Task task1 = new Task("Task 1", "Description for Task 1", Status.NEW);
         manager.createTask(task1);
         Task task2 = new Task("Task 2", "Description for Task 2", Status.DONE);
@@ -56,7 +57,7 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    public void ifOneTaskReceivedSeveralTimesHistoryListShouldBeContainOneRecord(){
+    public void ifOneTaskReceivedSeveralTimesHistoryListShouldBeContainOneRecord() {
         Task task1 = new Task("Task 1", "Description for Task 1", Status.NEW);
         manager.createTask(task1);
         manager.getTaskFromID(task1.getID());
@@ -66,7 +67,7 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    public void historyListShouldBeEmptyWhenAllTaskDeleted(){
+    public void historyListShouldBeEmptyWhenAllTaskDeleted() {
         Task task1 = new Task("Task 1", "Description for Task 1", Status.NEW);
         manager.createTask(task1);
         manager.getTaskFromID(task1.getID());
@@ -83,7 +84,7 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    public void removeLastReceivedTask(){
+    public void removeLastReceivedTask() {
         ArrayList<Task> listTask = new ArrayList<>();
         Task task1 = new Task("Task 1", "Description for Task 1", Status.NEW);
         manager.createTask(task1);
@@ -103,7 +104,7 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    public void taskShouldBeRemovedFromHistoryListMoreThenThree(){
+    public void taskShouldBeRemovedFromHistoryListMoreThenThree() {
         ArrayList<Task> listTask = new ArrayList<>();
         Task task1 = new Task("Task 1", "Description for Task 1", Status.NEW);
         manager.createTask(task1);
@@ -123,7 +124,7 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    public void listTaskAndHistoryListShouldBeEqual(){
+    public void listTaskAndHistoryListShouldBeEqual() {
         ArrayList<Task> listTask = new ArrayList<>();
         Task task1 = new Task("Task 1", "Description for Task 1", Status.NEW);
         manager.createTask(task1);
@@ -160,14 +161,14 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    public void shouldBeEqualAddedTaskAndRecordedTask(){
+    public void shouldBeEqualAddedTaskAndRecordedTask() {
         Task task1 = new Task("Task 1", "Description for Task 1", Status.NEW);
         manager.createTask(task1);
         manager.getTaskFromID(task1.getID());
     }
 
     @Test
-    public void shouldBeOneRecordWhenTaskGetOneTime(){
+    public void shouldBeOneRecordWhenTaskGetOneTime() {
         Task task1 = new Task("Task 1", "Description for Task 1", Status.NEW);
         manager.createTask(task1);
         manager.getTaskFromID(task1.getID());
@@ -175,14 +176,14 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    public void shouldBeEmptyWhenTaskCreated(){
+    public void shouldBeEmptyWhenTaskCreated() {
         Task task1 = new Task("Task 1", "Description for Task 1", Status.NEW);
         manager.createTask(task1);
         assertTrue(manager.getHistory().isEmpty());
     }
 
     @Test
-    public void shouldBeEmptyWhenTaskNotCreated(){
+    public void shouldBeEmptyWhenTaskNotCreated() {
         assertTrue(manager.getHistory().isEmpty());
     }
 

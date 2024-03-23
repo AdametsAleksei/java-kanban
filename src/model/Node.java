@@ -5,22 +5,27 @@ public class Node<T> {
     private Node<T> next;
     private final Task data;
 
-    public Node(Task data){
+    public Node(Task data) {
         this.data = data;
     }
-    public void setPrev(Node<T> node){
+
+    public void setPrev(Node<T> node) {
         this.prev = node;
     }
-    public void setNext(Node<T> node){
+
+    public void setNext(Node<T> node) {
         this.next = node;
     }
-    public Node<T> getPrev(){
+
+    public Node<T> getPrev() {
         return this.prev;
     }
-    public Node<T> getNext(){
+
+    public Node<T> getNext() {
         return this.next;
     }
-    public Task getData(){
+
+    public Task getData() {
         return this.data;
     }
 }

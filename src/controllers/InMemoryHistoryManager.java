@@ -5,16 +5,16 @@ import model.Task;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class InMemoryHistoryManager implements HistoryManager{
+public class InMemoryHistoryManager implements HistoryManager {
     private final HandMadeList listNode = new HandMadeList();
 
     @Override
-    public void addToHistory(Task task){
+    public void addToHistory(Task task) {
         listNode.linkLast(task);
     }
 
     @Override
-    public void remove(int id){
+    public void remove(int id) {
         listNode.remove(id);
     }
 
@@ -28,17 +28,17 @@ public class InMemoryHistoryManager implements HistoryManager{
         public Node<T> tail;
         HashMap<Integer, Node<T>> nodeMap = new HashMap<>();
 
-        private void linkLast(Task task){
+        private void linkLast(Task task) {
            Node<T> node = new Node<>(task);
-           if (nodeMap.isEmpty()){
+           if (nodeMap.isEmpty()) {
                nodeMap.put(task.getID(),node);
                this.head = node;
            } else if (nodeMap.containsKey(task.getID())) { //что если ID уже есть в мапе?
                Node<T> oldNode = nodeMap.get(task.getID());
-               if (this.head.equals(oldNode)){
-                   if(nodeMap.size() == 1){
+               if (this.head.equals(oldNode)) {
+                   if (nodeMap.size() == 1) {
                        this.head = node;
-                   } else if (nodeMap.size() == 2){
+                   } else if (nodeMap.size() == 2) {
                        this.tail.setPrev(null);
                        this.head = this.tail;
                        this.head.setNext(node);
@@ -51,7 +51,7 @@ public class InMemoryHistoryManager implements HistoryManager{
                         node.setPrev(this.tail);
                         this.tail = node;
                    }
-               } else if (this.tail == oldNode){
+               } else if (this.tail == oldNode) {
                    this.tail.getPrev().setNext(node);
                    node.setPrev(this.tail.getPrev());
                    this.tail = node;
@@ -63,7 +63,7 @@ public class InMemoryHistoryManager implements HistoryManager{
                    this.tail = node;
                }
                nodeMap.put(task.getID(), node);
-           }else if(nodeMap.size() == 1) {
+           } else if (nodeMap.size() == 1) {
                nodeMap.put(task.getID(), node);
                this.tail = node;
                this.head.setNext(node);
@@ -76,9 +76,9 @@ public class InMemoryHistoryManager implements HistoryManager{
            }
         }
 
-        private void remove(int id){
-            if (nodeMap.containsKey(id)){
-                if (nodeMap.size() == 1){
+        private void remove(int id) {
+            if (nodeMap.containsKey(id)) {
+                if (nodeMap.size() == 1) {
                     this.head = null;
                     nodeMap.remove(id);
                 } else if (nodeMap.size() == 2) {
@@ -86,11 +86,11 @@ public class InMemoryHistoryManager implements HistoryManager{
                     this.head.setNext(null);
                     nodeMap.remove(id);
                 } else {
-                    if (nodeMap.get(id).equals(this.head)){
+                    if (nodeMap.get(id).equals(this.head)) {
                         this.head.getNext().setPrev(null);
                         this.head = this.head.getNext();
                         nodeMap.remove(id);
-                    } else if (nodeMap.get(id).equals(this.tail)){
+                    } else if (nodeMap.get(id).equals(this.tail)) {
                         this.tail.getPrev().setNext(null);
                         this.tail = this.tail.getPrev();
                         nodeMap.remove(id);
@@ -104,15 +104,15 @@ public class InMemoryHistoryManager implements HistoryManager{
             }
         }
 
-        private ArrayList<Task> getTasks(){
+        private ArrayList<Task> getTasks() {
             ArrayList<Task> historyList = new ArrayList<>();
             if (!nodeMap.isEmpty()) {
                 Node<T> node = head;
                 Task task = node.getData();
-                while(true){
+                while (true) {
                     historyList.add(task);
                     node = node.getNext();
-                    if (node == null){
+                    if (node == null) {
                         break;
                     }
                     task = node.getData();
