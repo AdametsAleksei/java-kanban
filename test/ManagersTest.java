@@ -1,5 +1,3 @@
-package test;
-
 import controllers.InMemoryHistoryManager;
 import controllers.InMemoryTaskManager;
 import controllers.Managers;
