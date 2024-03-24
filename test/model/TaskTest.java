@@ -1,3 +1,5 @@
+package model;
+
 import model.Status;
 import model.Task;
 import org.junit.jupiter.api.Test;
