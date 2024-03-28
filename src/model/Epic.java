@@ -10,24 +10,24 @@ public class Epic extends Task {
         listSubTasks = new ArrayList<>();
     }
 
-    public void addSubTaskToEpic(SubTask subTask){
+    public void addSubTaskToEpic(SubTask subTask) {
         this.listSubTasks.add(subTask);
         updateStatus();
     }
 
-    public void removeSubTaskFromEpic(SubTask subTask){
+    public void removeSubTaskFromEpic(SubTask subTask) {
         listSubTasks.remove(subTask);
         updateStatus();
     }
 
-    public ArrayList<Task> getListSubTasks(){
+    public ArrayList<Task> getListSubTasks() {
         return (ArrayList<Task>) listSubTasks.clone();
     }
 
-    public void updateStatus(){
+    public void updateStatus() {
         int newSum = 0;
         int doneSum = 0;
-        if (listSubTasks.isEmpty()){
+        if (listSubTasks.isEmpty()) {
             this.status = Status.NEW;
         } else {
             for (Task subTask : listSubTasks) {
