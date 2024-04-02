@@ -1,6 +1,5 @@
 package model;
 
-import model.Epic;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

@@ -13,6 +13,11 @@ public class SubTask extends Task {
     }
 
     @Override
+    public String toFile() {
+        return id + "," + Type.SubTask + "," + name + "," + status + "," + description + "," + epicID;
+    }
+
+    @Override
     public String toString() {
         return "SubTask{" +
                 "epicID=" + epicID +

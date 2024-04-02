@@ -9,8 +9,11 @@ public class InMemoryTaskManager implements TaskManager {
     private final HashMap<Integer, Epic> epicList = new HashMap<>();
     private final HashMap<Integer, SubTask> subTaskList = new HashMap<>();
     private int id = 0;
-
     private final HistoryManager historyManager = Managers.getDefaultHistory();
+
+    protected void addToHistory(Task task) {
+        historyManager.addToHistory(task);
+    }
 
     @Override
     public ArrayList<Task> getHistory() {
@@ -21,15 +24,15 @@ public class InMemoryTaskManager implements TaskManager {
     public Task getTaskFromID(int taskID) {
         if (taskList.containsKey(taskID)) {
             Task task = taskList.get(taskID);
-            historyManager.addToHistory(task);
+            addToHistory(task);
             return task;
         } else if (epicList.containsKey(taskID)) {
             Epic epic = epicList.get(taskID);
-            historyManager.addToHistory(epic);
+            addToHistory(epic);
             return epic;
         } else if (subTaskList.containsKey(taskID)) {
             SubTask subTask = subTaskList.get(taskID);
-            historyManager.addToHistory(subTask);
+            addToHistory(subTask);
             return subTask;
         }
         return null;
@@ -42,20 +45,26 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void createTask(Task task) {
-        task.setID(makeIDTask());
+        if (task.getID() == 0) {
+            task.setID(makeIDTask());
+        }
         taskList.put(task.getID(),task);
     }
 
     @Override
     public void createEpic(Epic epic) {
-        epic.setID(makeIDTask());
+        if (epic.getID() == 0) {
+            epic.setID(makeIDTask());
+        }
         epicList.put(epic.getID(),epic);
         epic.setStatus(Status.NEW);
     }
 
     @Override
     public void createSubTask(SubTask subTask) {
-        subTask.setID(makeIDTask());
+        if (subTask.getID() == 0) {
+            subTask.setID(makeIDTask());
+        }
         subTaskList.put(subTask.getID(),subTask);
         epicList.get(subTask.getEpicID()).addSubTaskToEpic(subTask);
     }

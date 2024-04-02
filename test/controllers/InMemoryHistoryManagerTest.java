@@ -1,10 +1,6 @@
-package сontrollers;
+package controllers;
 
-import controllers.InMemoryTaskManager;
-import model.Epic;
-import model.Status;
-import model.SubTask;
-import model.Task;
+import model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

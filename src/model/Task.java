@@ -36,6 +36,10 @@ public class Task {
         return this.status;
     }
 
+    public String toFile() {
+        return id + "," + Type.Task + "," + name + "," + status + "," + description;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
