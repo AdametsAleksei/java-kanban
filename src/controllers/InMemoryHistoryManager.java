@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private final HandMadeList listNode = new HandMadeList();
+    private final HandMadeList<Node<Task>> listNode = new HandMadeList<>();
 
     @Override
     public void addToHistory(Task task) {
@@ -20,10 +20,10 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public ArrayList<Task> getHistory() {
-        return new ArrayList<Task>(listNode.getTasks());
+        return new ArrayList<>(listNode.getTasks());
     }
 
-    public class HandMadeList<T> {
+    public static class HandMadeList<T> {
         public Node<T> head;
         public Node<T> tail;
         HashMap<Integer, Node<T>> nodeMap = new HashMap<>();
@@ -33,7 +33,7 @@ public class InMemoryHistoryManager implements HistoryManager {
            if (nodeMap.isEmpty()) {
                nodeMap.put(task.getID(),node);
                this.head = node;
-           } else if (nodeMap.containsKey(task.getID())) { //что если ID уже есть в мапе?
+           } else if (nodeMap.containsKey(task.getID())) {
                Node<T> oldNode = nodeMap.get(task.getID());
                if (this.head.equals(oldNode)) {
                    if (nodeMap.size() == 1) {
