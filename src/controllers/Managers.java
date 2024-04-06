@@ -1,5 +1,7 @@
 package controllers;
 
+import java.io.File;
+
 public class Managers {
 
     public static TaskManager getDefault() {
@@ -10,7 +12,7 @@ public class Managers {
         return new InMemoryHistoryManager();
     }
 
-    public static FileBackedTaskManager getDefaultFile() {
-        return new FileBackedTaskManager();
+    public static FileBackedTaskManager getDefaultFile(File file) {
+        return FileBackedTaskManager.loadFromFile(file);
     }
 }

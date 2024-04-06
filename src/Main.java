@@ -1,10 +1,15 @@
 import controllers.*;
 import model.*;
 
+import java.io.File;
+import java.nio.file.Paths;
+
 public class Main {
 
     public static void main(String[] args) {
-        FileBackedTaskManager manager = Managers.getDefaultFile();
+        File file = new File(Paths.get("src",
+                "Resources","TaskManager.csv").toString());
+        FileBackedTaskManager manager = Managers.getDefaultFile(file);
         //Заведите несколько разных задач, эпиков и подзадач.
         Task task1 = new Task("Task 1", "Description for Task 1", Status.NEW);
         manager.createTask(task1);
@@ -31,8 +36,7 @@ public class Main {
         manager.getTaskFromID(epic1.getID());
         manager.removeTask(subTask1);
         //Создайте новый FileBackedTaskManager-менеджер из этого же файла.
-        FileBackedTaskManager managerNew = Managers.getDefaultFile();
-        managerNew.loadFromFile();
+        FileBackedTaskManager managerNew = Managers.getDefaultFile(file);
         //Проверьте, что все задачи, эпики, подзадачи, которые были в старом менеджере, есть в новом.
         System.out.println(manager.getHistory());
         System.out.println(managerNew.getHistory());

@@ -3,15 +3,16 @@ package controllers;
 import model.*;
 import exceptions.ManagerSaveException;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
+public class FileBackedTaskManager extends InMemoryTaskManager {
+    private final File file;
+
+    public FileBackedTaskManager(File file) {
+        this.file = file;
+    }
 
     private Task createTaskFromFile(String name, String description, int id, Status status) {
         Task task = new Task(name, description, status);
@@ -61,28 +62,30 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         }
     }
 
-    public void loadFromFile() {
-        try (BufferedReader bufferedReader = Files.newBufferedReader(Paths.get("src",
-                "Resources","TaskManager.csv"))) {
+    public static FileBackedTaskManager loadFromFile(File file) {
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
+            FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(file);
             while (bufferedReader.ready()) {
                 List<Integer> historyList = new ArrayList<>();
                 String[] line = bufferedReader.readLine().split(",");
+                if (line[0].equals("")) {
+                    break;
+                }
                 if (!line[0].equals("History")) {
-                    restoreTaskFromFile(line);
+                    fileBackedTaskManager.restoreTaskFromFile(line);
                 } else {
                     historyList.add(Integer.parseInt(line[1]));
                 }
-                restoreHistoryFromFile(historyList);
+                fileBackedTaskManager.restoreHistoryFromFile(historyList);
             }
+            return fileBackedTaskManager;
         } catch (IOException e) {
             throw new ManagerSaveException("Ошибка при загрузке", e);
         }
     }
 
     private void save() {
-        try (BufferedWriter bufferedWriter = Files.newBufferedWriter(
-                Paths.get("src",
-                        "Resources","TaskManager.csv"))) {
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file))) {
             ArrayList<Task> tasks = new ArrayList<>(super.getAllTask());
             ArrayList<Task> epics = new ArrayList<>(super.getAllEpic());
             ArrayList<Task> subTasks = new ArrayList<>(super.getAllSubTask());

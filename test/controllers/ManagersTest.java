@@ -2,13 +2,17 @@ package controllers;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.io.IOException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ManagersTest {
 
     @Test
-    public void shouldReturnInMemoryFileBackedTaskManager() {
-        assertEquals(Managers.getDefaultFile().getClass(), FileBackedTaskManager.class);
+    public void shouldReturnInMemoryFileBackedTaskManager() throws IOException {
+        assertEquals(Managers.getDefaultFile(File.createTempFile("test", "csv")).getClass(),
+                FileBackedTaskManager.class);
     }
 
     @Test
