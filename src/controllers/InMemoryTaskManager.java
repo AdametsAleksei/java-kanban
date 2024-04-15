@@ -1,8 +1,11 @@
 package controllers;
 
+import exceptions.TimeReservedException;
 import model.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TreeSet;
 
 public class InMemoryTaskManager implements TaskManager {
     private final HashMap<Integer, Task> taskList = new HashMap<>();
@@ -11,8 +14,36 @@ public class InMemoryTaskManager implements TaskManager {
     private int id = 0;
     private final HistoryManager historyManager = Managers.getDefaultHistory();
 
+    private boolean validate(Task taskForValidate) {
+        return getPrioritizedTasks().stream()
+                .filter(task -> task.getStartTime().isBefore(taskForValidate.getEndTime())
+                        & task.getEndTime().isAfter(taskForValidate.getStartTime()))
+                .toList().isEmpty();
+    }
+
     protected void addToHistory(Task task) {
         historyManager.addToHistory(task);
+    }
+
+    @Override
+    public TreeSet<Task> getPrioritizedTasks() {
+        TreeSet<Task> prioritizedTasksList = new TreeSet<>((task1, task2) -> {
+            if (task1.getStartTime()
+                    .isAfter(task2.getStartTime())) {
+                return 1;
+            }
+            if (task1.getStartTime().isBefore(task2.getStartTime())) {
+                return -1;
+            } else {
+                return 0;
+            }
+        });
+        ArrayList<Task> allTasks = new ArrayList<>(taskList.values());
+        allTasks.addAll(epicList.values());
+        allTasks.addAll(subTaskList.values());
+        prioritizedTasksList.addAll(allTasks.stream()
+                .filter(task -> task.getStartTime() != null).toList());
+        return prioritizedTasksList;
     }
 
     @Override
@@ -45,10 +76,14 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void createTask(Task task) {
-        if (task.getID() == 0) {
-            task.setID(makeIDTask());
+        if (validate(task)) {
+            if (task.getID() == 0) {
+                task.setID(makeIDTask());
+            }
+            taskList.put(task.getID(), task);
+        } else {
+            throw new TimeReservedException("Время занято для - " + task.getName());
         }
-        taskList.put(task.getID(),task);
     }
 
     @Override
@@ -57,16 +92,19 @@ public class InMemoryTaskManager implements TaskManager {
             epic.setID(makeIDTask());
         }
         epicList.put(epic.getID(),epic);
-        epic.setStatus(Status.NEW);
     }
 
     @Override
     public void createSubTask(SubTask subTask) {
-        if (subTask.getID() == 0) {
-            subTask.setID(makeIDTask());
+        if (validate(subTask)) {
+            if (subTask.getID() == 0) {
+                subTask.setID(makeIDTask());
+            }
+            subTaskList.put(subTask.getID(), subTask);
+            epicList.get(subTask.getEpicID()).addSubTaskToEpic(subTask);
+        } else {
+            throw new TimeReservedException("Время занято для - " + subTask.getName());
         }
-        subTaskList.put(subTask.getID(),subTask);
-        epicList.get(subTask.getEpicID()).addSubTaskToEpic(subTask);
     }
 
     @Override

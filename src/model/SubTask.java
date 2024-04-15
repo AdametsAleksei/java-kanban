@@ -1,10 +1,13 @@
 package model;
 
+import java.time.Duration;
+
 public class SubTask extends Task {
     private final int epicID;
 
-    public SubTask(String taskName, String description, Status status, int epicID) {
-        super(taskName, description, status);
+    public SubTask(String taskName, String description, Status status,
+                   int epicID, Duration duration, String startTime) {
+        super(taskName, description, status, duration, startTime);
         this.epicID = epicID;
     }
 
@@ -14,7 +17,8 @@ public class SubTask extends Task {
 
     @Override
     public String toFile() {
-        return id + "," + Type.SubTask + "," + name + "," + status + "," + description + "," + epicID;
+        return id + "," + Type.SubTask + "," + name + "," + status + ","
+                + description + "," + epicID + "," + duration.toMinutes() + "," + startTime.format(formatter);
     }
 
     @Override

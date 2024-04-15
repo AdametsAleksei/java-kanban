@@ -4,6 +4,7 @@ import model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,9 +23,10 @@ class InMemoryHistoryManagerTest {
         Epic epic1 = new Epic("Epic 1", "Description for Epic 1");
         manager.createEpic(epic1);
         SubTask subTask1 = new SubTask("SubTask 1", "SubTask 1 for Epic 1",
-                Status.IN_PROGRESS,epic1.getID());
+                Status.IN_PROGRESS,epic1.getID(), Duration.ofMinutes(10), "12.04.24 - 17:40");
         manager.createSubTask(subTask1);
-        Task task1 = new Task("Task 1", "Description for Task 1", Status.NEW);
+        Task task1 = new Task("Task 1", "Description for Task 1",
+                Status.NEW, Duration.ofMinutes(10), "12.04.24 - 17:40");
         manager.createTask(task1);
         manager.getTaskFromID(task1.getID());
         manager.getTaskFromID(epic1.getID());
@@ -41,9 +43,11 @@ class InMemoryHistoryManagerTest {
 
     @Test
     public void ifTwoTaskReceivedSeveralTimesHistoryListShouldBeContainTwoRecordInRightOrder() {
-        Task task1 = new Task("Task 1", "Description for Task 1", Status.NEW);
+        Task task1 = new Task("Task 1", "Description for Task 1",
+                Status.NEW, Duration.ofMinutes(10), "12.04.24 - 17:40");
         manager.createTask(task1);
-        Task task2 = new Task("Task 2", "Description for Task 2", Status.DONE);
+        Task task2 = new Task("Task 2", "Description for Task 2",
+                Status.DONE, Duration.ofMinutes(10), "12.04.24 - 16:40");
         manager.createTask(task2);
         manager.getTaskFromID(task1.getID());
         manager.getTaskFromID(task2.getID());
@@ -56,7 +60,8 @@ class InMemoryHistoryManagerTest {
 
     @Test
     public void ifOneTaskReceivedSeveralTimesHistoryListShouldBeContainOneRecord() {
-        Task task1 = new Task("Task 1", "Description for Task 1", Status.NEW);
+        Task task1 = new Task("Task 1", "Description for Task 1",
+                Status.NEW, Duration.ofMinutes(10), "12.04.24 - 17:40");
         manager.createTask(task1);
         manager.getTaskFromID(task1.getID());
         manager.getTaskFromID(task1.getID());
@@ -66,10 +71,12 @@ class InMemoryHistoryManagerTest {
 
     @Test
     public void historyListShouldBeEmptyWhenAllTaskDeleted() {
-        Task task1 = new Task("Task 1", "Description for Task 1", Status.NEW);
+        Task task1 = new Task("Task 1", "Description for Task 1",
+                Status.NEW, Duration.ofMinutes(10), "12.04.24 - 17:10");
         manager.createTask(task1);
         manager.getTaskFromID(task1.getID());
-        Task task2 = new Task("Task 2", "Description for Task 2", Status.DONE);
+        Task task2 = new Task("Task 2", "Description for Task 2",
+                Status.DONE, Duration.ofMinutes(10), "12.04.24 - 17:40");
         manager.createTask(task2);
         manager.getTaskFromID(task2.getID());
         Epic epic1 = new Epic("Epic 1", "Description for Epic 1");
@@ -84,11 +91,13 @@ class InMemoryHistoryManagerTest {
     @Test
     public void removeLastReceivedTask() {
         ArrayList<Task> listTask = new ArrayList<>();
-        Task task1 = new Task("Task 1", "Description for Task 1", Status.NEW);
+        Task task1 = new Task("Task 1", "Description for Task 1",
+                Status.NEW, Duration.ofMinutes(10), "12.04.24 - 17:20");
         manager.createTask(task1);
         manager.getTaskFromID(task1.getID());
         listTask.add(task1);
-        Task task2 = new Task("Task 2", "Description for Task 2", Status.DONE);
+        Task task2 = new Task("Task 2", "Description for Task 2",
+                Status.DONE, Duration.ofMinutes(10), "12.04.24 - 17:40");
         manager.createTask(task2);
         manager.getTaskFromID(task2.getID());
         listTask.add(task2);
@@ -104,11 +113,13 @@ class InMemoryHistoryManagerTest {
     @Test
     public void taskShouldBeRemovedFromHistoryListMoreThenThree() {
         ArrayList<Task> listTask = new ArrayList<>();
-        Task task1 = new Task("Task 1", "Description for Task 1", Status.NEW);
+        Task task1 = new Task("Task 1", "Description for Task 1",
+                Status.NEW, Duration.ofMinutes(10), "12.04.24 - 17:10");
         manager.createTask(task1);
         manager.getTaskFromID(task1.getID());
         listTask.add(task1);
-        Task task2 = new Task("Task 2", "Description for Task 2", Status.DONE);
+        Task task2 = new Task("Task 2", "Description for Task 2",
+                Status.DONE, Duration.ofMinutes(10), "12.04.24 - 17:40");
         manager.createTask(task2);
         manager.getTaskFromID(task2.getID());
         listTask.add(task2);
@@ -124,11 +135,13 @@ class InMemoryHistoryManagerTest {
     @Test
     public void listTaskAndHistoryListShouldBeEqual() {
         ArrayList<Task> listTask = new ArrayList<>();
-        Task task1 = new Task("Task 1", "Description for Task 1", Status.NEW);
+        Task task1 = new Task("Task 1", "Description for Task 1",
+                Status.NEW, Duration.ofMinutes(10), "12.04.24 - 17:00");
         manager.createTask(task1);
         manager.getTaskFromID(task1.getID());
         listTask.add(task1);
-        Task task2 = new Task("Task 2", "Description for Task 2", Status.DONE);
+        Task task2 = new Task("Task 2", "Description for Task 2",
+                Status.DONE, Duration.ofMinutes(10), "12.04.24 - 17:20");
         manager.createTask(task2);
         manager.getTaskFromID(task2.getID());
         listTask.add(task2);
@@ -137,12 +150,12 @@ class InMemoryHistoryManagerTest {
         manager.getTaskFromID(epic1.getID());
         listTask.add(epic1);
         SubTask subTask1 = new SubTask("SubTask 1", "SubTask 1 for Epic 1",
-                Status.IN_PROGRESS,epic1.getID());
+                Status.IN_PROGRESS,epic1.getID(), Duration.ofMinutes(10), "12.04.24 - 17:30");
         manager.createSubTask(subTask1);
         manager.getTaskFromID(subTask1.getID());
         listTask.add(subTask1);
         SubTask subTask2 = new SubTask("SubTask 2", "SubTask 2 for Epic 1",
-                Status.DONE,epic1.getID());
+                Status.DONE,epic1.getID(), Duration.ofMinutes(10), "12.04.24 - 18:40");
         manager.createSubTask(subTask2);
         manager.getTaskFromID(subTask2.getID());
         listTask.add(subTask2);
@@ -151,7 +164,7 @@ class InMemoryHistoryManagerTest {
         manager.getTaskFromID(epic2.getID());
         listTask.add(epic2);
         SubTask subTask3 = new SubTask("SubTask 3", "SubTask 3 for Epic 2",
-                Status.NEW, epic2.getID());
+                Status.NEW, epic2.getID(), Duration.ofMinutes(10), "12.04.24 - 18:00");
         manager.createSubTask(subTask3);
         manager.getTaskFromID(subTask3.getID());
         listTask.add(subTask3);
@@ -160,14 +173,16 @@ class InMemoryHistoryManagerTest {
 
     @Test
     public void shouldBeEqualAddedTaskAndRecordedTask() {
-        Task task1 = new Task("Task 1", "Description for Task 1", Status.NEW);
+        Task task1 = new Task("Task 1", "Description for Task 1",
+                Status.NEW, Duration.ofMinutes(10), "12.04.24 - 17:40");
         manager.createTask(task1);
         manager.getTaskFromID(task1.getID());
     }
 
     @Test
     public void shouldBeOneRecordWhenTaskGetOneTime() {
-        Task task1 = new Task("Task 1", "Description for Task 1", Status.NEW);
+        Task task1 = new Task("Task 1", "Description for Task 1",
+                Status.NEW, Duration.ofMinutes(10), "12.04.24 - 17:40");
         manager.createTask(task1);
         manager.getTaskFromID(task1.getID());
         assertEquals(1, manager.getHistory().size());
@@ -175,7 +190,8 @@ class InMemoryHistoryManagerTest {
 
     @Test
     public void shouldBeEmptyWhenTaskCreated() {
-        Task task1 = new Task("Task 1", "Description for Task 1", Status.NEW);
+        Task task1 = new Task("Task 1", "Description for Task 1",
+                Status.NEW, Duration.ofMinutes(10), "12.04.24 - 17:40");
         manager.createTask(task1);
         assertTrue(manager.getHistory().isEmpty());
     }
