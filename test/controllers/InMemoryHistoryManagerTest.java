@@ -26,7 +26,7 @@ class InMemoryHistoryManagerTest {
                 Status.IN_PROGRESS,epic1.getID(), Duration.ofMinutes(10), "12.04.24 - 17:40");
         manager.createSubTask(subTask1);
         Task task1 = new Task("Task 1", "Description for Task 1",
-                Status.NEW, Duration.ofMinutes(10), "12.04.24 - 17:40");
+                Status.NEW, Duration.ofMinutes(10), "12.04.24 - 17:20");
         manager.createTask(task1);
         manager.getTaskFromID(task1.getID());
         manager.getTaskFromID(epic1.getID());
@@ -155,7 +155,7 @@ class InMemoryHistoryManagerTest {
         manager.getTaskFromID(subTask1.getID());
         listTask.add(subTask1);
         SubTask subTask2 = new SubTask("SubTask 2", "SubTask 2 for Epic 1",
-                Status.DONE,epic1.getID(), Duration.ofMinutes(10), "12.04.24 - 18:40");
+                Status.DONE,epic1.getID(), Duration.ofMinutes(10), "12.04.24 - 18:00");
         manager.createSubTask(subTask2);
         manager.getTaskFromID(subTask2.getID());
         listTask.add(subTask2);
@@ -164,7 +164,7 @@ class InMemoryHistoryManagerTest {
         manager.getTaskFromID(epic2.getID());
         listTask.add(epic2);
         SubTask subTask3 = new SubTask("SubTask 3", "SubTask 3 for Epic 2",
-                Status.NEW, epic2.getID(), Duration.ofMinutes(10), "12.04.24 - 18:00");
+                Status.NEW, epic2.getID(), Duration.ofMinutes(10), "12.04.24 - 18:40");
         manager.createSubTask(subTask3);
         manager.getTaskFromID(subTask3.getID());
         listTask.add(subTask3);
