@@ -2,11 +2,11 @@ package controllers;
 
 import model.*;
 import java.util.ArrayList;
-import java.util.TreeSet;
+import java.util.List;
 
 public interface TaskManager {
 
-    TreeSet<Task> getPrioritizedTasks();
+    List<Task> getPrioritizedTasks();
 
     ArrayList<Task> getHistory();
 

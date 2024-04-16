@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Epic extends Task {
-    private final ArrayList<Task> listSubTasks;
+    public final ArrayList<Task> listSubTasks;
     private LocalDateTime endTime;
 
     public Epic(String taskName, String description) {
@@ -22,6 +22,7 @@ public class Epic extends Task {
             for (Task task : listSubTasks) {
                 if (getDuration() == null) {
                     setDuration(task.getDuration());
+                    duration = task.getDuration();
                 } else {
                     if (duration == null) {
                         duration = task.getDuration();

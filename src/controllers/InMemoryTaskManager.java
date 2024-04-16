@@ -3,9 +3,7 @@ package controllers;
 import exceptions.TimeReservedException;
 import model.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.TreeSet;
+import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
     private final HashMap<Integer, Task> taskList = new HashMap<>();
@@ -13,10 +11,11 @@ public class InMemoryTaskManager implements TaskManager {
     private final HashMap<Integer, SubTask> subTaskList = new HashMap<>();
     private int id = 0;
     private final HistoryManager historyManager = Managers.getDefaultHistory();
+    private final Set<Task> prioritizedTasks = new TreeSet<>(Comparator.comparing(Task::getStartTime));
 
     private boolean validate(Task taskForValidate) {
         return getPrioritizedTasks().stream()
-                .filter(task -> task.getStartTime().isBefore(taskForValidate.getEndTime())
+                .filter(task -> !task.getClass().equals(Epic.class) && task.getStartTime().isBefore(taskForValidate.getEndTime())
                         & task.getEndTime().isAfter(taskForValidate.getStartTime()))
                 .toList().isEmpty();
     }
@@ -25,25 +24,19 @@ public class InMemoryTaskManager implements TaskManager {
         historyManager.addToHistory(task);
     }
 
+    private void addToSetPrioritizedTasks(Task task) {
+        if (task.getStartTime() != null) {
+            prioritizedTasks.add(task);
+        }
+    }
+
+    private void removeFromSetPrioritizedTasks(Task task) {
+        prioritizedTasks.remove(task);
+    }
+
     @Override
-    public TreeSet<Task> getPrioritizedTasks() {
-        TreeSet<Task> prioritizedTasksList = new TreeSet<>((task1, task2) -> {
-            if (task1.getStartTime()
-                    .isAfter(task2.getStartTime())) {
-                return 1;
-            }
-            if (task1.getStartTime().isBefore(task2.getStartTime())) {
-                return -1;
-            } else {
-                return 0;
-            }
-        });
-        ArrayList<Task> allTasks = new ArrayList<>(taskList.values());
-        allTasks.addAll(epicList.values());
-        allTasks.addAll(subTaskList.values());
-        prioritizedTasksList.addAll(allTasks.stream()
-                .filter(task -> task.getStartTime() != null).toList());
-        return prioritizedTasksList;
+    public List<Task> getPrioritizedTasks() {
+        return List.copyOf(prioritizedTasks);
     }
 
     @Override
@@ -81,6 +74,7 @@ public class InMemoryTaskManager implements TaskManager {
                 task.setID(makeIDTask());
             }
             taskList.put(task.getID(), task);
+            addToSetPrioritizedTasks(task);
         } else {
             throw new TimeReservedException("Время занято для - " + task.getName());
         }
@@ -102,6 +96,7 @@ public class InMemoryTaskManager implements TaskManager {
             }
             subTaskList.put(subTask.getID(), subTask);
             epicList.get(subTask.getEpicID()).addSubTaskToEpic(subTask);
+            addToSetPrioritizedTasks(subTask);
         } else {
             throw new TimeReservedException("Время занято для - " + subTask.getName());
         }
@@ -127,6 +122,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (!taskList.isEmpty()) {
             for (Task task : taskList.values()) {
                 historyManager.remove(task.getID());
+                removeFromSetPrioritizedTasks(task);
             }
             taskList.clear();
         }
@@ -150,6 +146,7 @@ public class InMemoryTaskManager implements TaskManager {
             for (SubTask subTask : deleteList) {
                 removeTask(subTask);
                 historyManager.remove(subTask.getID());
+                removeFromSetPrioritizedTasks(subTask);
             }
         }
     }
@@ -160,6 +157,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (taskList.containsKey(taskID)) {
             taskList.remove(taskID);
             historyManager.remove(taskID);
+            removeFromSetPrioritizedTasks(task);
         } else if (epicList.containsKey(taskID)) {
             if (!subTaskList.isEmpty()) {
                 ArrayList<SubTask> deleteList = new ArrayList<>(subTaskList.values());
@@ -167,6 +165,7 @@ public class InMemoryTaskManager implements TaskManager {
                     if (subTask.getEpicID() == taskID) {
                         removeTask(subTask);
                         historyManager.remove(subTask.getID());
+                        removeFromSetPrioritizedTasks(subTask);
                     }
                 }
             }
@@ -177,13 +176,20 @@ public class InMemoryTaskManager implements TaskManager {
             epic.removeSubTaskFromEpic(subTaskList.get(taskID));
             subTaskList.remove(taskID);
             historyManager.remove(taskID);
+            removeFromSetPrioritizedTasks(task);
         }
     }
 
     @Override
     public void updateTask(int taskID, Task newTask) {
-        newTask.setID(taskID);
-        taskList.replace(taskID,newTask);
+        if (validate(newTask)) {
+            newTask.setID(taskID);
+            prioritizedTasks.remove(getTaskFromID(taskID));
+            taskList.replace(taskID, newTask);
+            addToSetPrioritizedTasks(newTask);
+        } else {
+            throw new TimeReservedException("Время занято для - " + newTask.getName());
+        }
     }
 
     @Override
@@ -200,11 +206,15 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateSubTask(int taskID, SubTask newSubTask) {
-        newSubTask.setID(taskID);
-        Epic epic = epicList.get(newSubTask.getEpicID());
-        epic.removeSubTaskFromEpic(subTaskList.get(taskID));
-        subTaskList.replace(taskID,newSubTask);
-        epic.addSubTaskToEpic(newSubTask);
+        if (validate(newSubTask)) {
+            newSubTask.setID(taskID);
+            Epic epic = epicList.get(newSubTask.getEpicID());
+            epic.removeSubTaskFromEpic(subTaskList.get(taskID));
+            subTaskList.replace(taskID, newSubTask);
+            epic.addSubTaskToEpic(newSubTask);
+        } else {
+            throw new TimeReservedException("Время занято для - " + newSubTask.getName());
+        }
     }
 
     @Override
