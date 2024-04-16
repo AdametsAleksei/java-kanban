@@ -1,22 +1,55 @@
 package model;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Epic extends Task {
-    private ArrayList<Task> listSubTasks;
+    public final ArrayList<Task> listSubTasks;
+    private LocalDateTime endTime;
 
     public Epic(String taskName, String description) {
-        super(taskName, description, Status.NEW);
+        super(taskName, description, Status.NEW, null, null);
         listSubTasks = new ArrayList<>();
+    }
+
+    public void updateTimeEpic() {
+        Duration duration = null;
+        if (listSubTasks.isEmpty()) {
+            setDuration(null);
+            setStartTime(null);
+        } else {
+            for (Task task : listSubTasks) {
+                if (getDuration() == null) {
+                    setDuration(task.getDuration());
+                    duration = task.getDuration();
+                } else {
+                    if (duration == null) {
+                        duration = task.getDuration();
+                    } else {
+                        duration = duration.plus(task.getDuration());
+                        setDuration(duration);
+                    }
+                }
+                if (getStartTime() == null || task.getStartTime().isBefore(getStartTime())) {
+                    setStartTime(task.getStartTime().format(formatter));
+                }
+                if (getEndTime() == null || task.getEndTime().isAfter(getEndTime())) {
+                    endTime = task.getEndTime();
+                }
+            }
+        }
     }
 
     public void addSubTaskToEpic(SubTask subTask) {
         this.listSubTasks.add(subTask);
+        updateTimeEpic();
         updateStatus();
     }
 
     public void removeSubTaskFromEpic(SubTask subTask) {
         listSubTasks.remove(subTask);
+        updateTimeEpic();
         updateStatus();
     }
 
@@ -55,8 +88,14 @@ public class Epic extends Task {
     }
 
     @Override
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    @Override
     public String toFile() {
-        return id + "," + Type.Epic + "," + name + "," + status + "," + description;
+        return id + "," + Type.Epic + "," + name + ","
+                + status + "," + description; // + "," + duration.toMinutes() + "," + startTime;
     }
 
     @Override

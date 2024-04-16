@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
 
 public class FileBackedTaskManagerTest {
 
@@ -25,9 +26,10 @@ public class FileBackedTaskManagerTest {
         Epic epic1 = new Epic("Epic 1", "Description for Epic 1");
         manager.createEpic(epic1);
         SubTask subTask1 = new SubTask("SubTask 1", "SubTask 1 for Epic 1",
-                Status.IN_PROGRESS,epic1.getID());
+                Status.IN_PROGRESS,epic1.getID(), Duration.ofMinutes(30), "12.04.24 - 17:40");
         manager.createSubTask(subTask1);
-        Task task1 = new Task("Task 1", "Description for Task 1", Status.NEW);
+        Task task1 = new Task("Task 1", "Description for Task 1",
+                Status.NEW, Duration.ofMinutes(10), "12.04.24 - 17:10");
         manager.createTask(task1);
         manager.getTaskFromID(task1.getID());
         manager.getTaskFromID(epic1.getID());
@@ -43,12 +45,13 @@ public class FileBackedTaskManagerTest {
     @Test
     public void shouldBeEmptyFileWhenAllDataDeleted() {
         FileBackedTaskManager manager = Managers.getDefaultFile(file);
-        Task task1 = new Task("Task 1", "Description for Task 1", Status.NEW);
+        Task task1 = new Task("Task 1", "Description for Task 1",
+                Status.NEW, Duration.ofMinutes(20), "12.04.24 - 17:40");
         manager.createTask(task1);
         Epic epic1 = new Epic("Epic 1", "Epic with 3 SubTask");
         manager.createEpic(epic1);
         SubTask subTask1 = new SubTask("SubTask 2", "SubTask 2 for Epic 1",
-                Status.DONE,epic1.getID());
+                Status.DONE,epic1.getID(), Duration.ofMinutes(10), "12.04.24 - 17:20");
         manager.createSubTask(subTask1);
         manager.deleteAllTask();
         manager.deleteAllSubTask();
@@ -62,7 +65,8 @@ public class FileBackedTaskManagerTest {
     @Test
     public void shouldBeEqualsWhenOneTaskSaveToFileAndLoadFromFile() {
         FileBackedTaskManager manager = Managers.getDefaultFile(file);
-        Task task1 = new Task("Task 1", "Description for Task 1", Status.NEW);
+        Task task1 = new Task("Task 1", "Description for Task 1",
+                Status.NEW, Duration.ofMinutes(20), "12.04.24 - 17:40");
         manager.createTask(task1);
         FileBackedTaskManager manager1 = Managers.getDefaultFile(file);
         assertEquals(manager.getAllTask(), manager1.getAllTask());
@@ -74,7 +78,7 @@ public class FileBackedTaskManagerTest {
         Epic epic1 = new Epic("Epic 1", "Epic with 3 SubTask");
         manager.createEpic(epic1);
         SubTask subTask1 = new SubTask("SubTask 2", "SubTask 2 for Epic 1",
-                Status.DONE,epic1.getID());
+                Status.DONE,epic1.getID(), Duration.ofMinutes(20), "12.04.24 - 17:40");
         manager.createSubTask(subTask1);
         FileBackedTaskManager manager1 = Managers.getDefaultFile(file);
         assertEquals(manager.getAllEpic(), manager1.getAllEpic());

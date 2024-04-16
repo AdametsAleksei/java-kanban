@@ -4,6 +4,7 @@ import model.*;
 import exceptions.ManagerSaveException;
 
 import java.io.*;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,8 +15,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         this.file = file;
     }
 
-    private Task createTaskFromFile(String name, String description, int id, Status status) {
-        Task task = new Task(name, description, status);
+    private Task createTaskFromFile(String name, String description, int id,
+                                    Status status, Duration duration, String startTime) {
+        Task task = new Task(name, description, status, duration, startTime);
         task.setID(id);
         return task;
     }
@@ -26,9 +28,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         return epic;
     }
 
-    public SubTask createSubTaskFromFile(String name, String description, int id, Status status, int epicID) {
-        SubTask subTask = new SubTask(name, description, status, epicID);
+    public SubTask createSubTaskFromFile(String name, String description, int id,
+                                         Status status, int epicID, Duration duration, String startTime) {
+        SubTask subTask = new SubTask(name, description, status, epicID, duration, startTime);
         subTask.setID(id);
+        subTask.setDuration(duration);
+        subTask.setStartTime(startTime);
         return subTask;
     }
 
@@ -44,14 +49,17 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     public void restoreTaskFromFile(String[] line) {
         if (line[1].equals(Type.Task.toString())) {
-            Task task = createTaskFromFile(line[2], line[4], Integer.parseInt(line[0]), getStatusFromFile(line[3]));
+            Task task = createTaskFromFile(line[2], line[4], Integer.parseInt(line[0]),
+                    getStatusFromFile(line[3]), Duration.ofMinutes(Integer.parseInt(line[5])),
+                    line[6]);
             super.createTask(task);
         } else if (line[1].equals(Type.Epic.toString())) {
             Epic epic = createEpicFromFile(line[2], line[4], Integer.parseInt(line[0]));
             super.createEpic(epic);
         } else if (line[1].equals(Type.SubTask.toString())) {
             SubTask subTask = createSubTaskFromFile(line[2], line[4], Integer.parseInt(line[0]),
-                    getStatusFromFile(line[3]), Integer.parseInt(line[5]));
+                    getStatusFromFile(line[3]), Integer.parseInt(line[5]),
+                    Duration.ofMinutes(Integer.parseInt(line[6])), line[7]);
             super.createSubTask(subTask);
         }
     }
@@ -71,10 +79,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 if (line[0].equals("")) {
                     break;
                 }
-                if (!line[0].equals("History")) {
-                    fileBackedTaskManager.restoreTaskFromFile(line);
-                } else {
+                if (line[0].equals("History")) {
                     historyList.add(Integer.parseInt(line[1]));
+                } else {
+                    fileBackedTaskManager.restoreTaskFromFile(line);
                 }
                 fileBackedTaskManager.restoreHistoryFromFile(historyList);
             }

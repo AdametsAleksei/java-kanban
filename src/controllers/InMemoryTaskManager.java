@@ -1,8 +1,9 @@
 package controllers;
 
+import exceptions.TimeReservedException;
 import model.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+
+import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
     private final HashMap<Integer, Task> taskList = new HashMap<>();
@@ -10,9 +11,32 @@ public class InMemoryTaskManager implements TaskManager {
     private final HashMap<Integer, SubTask> subTaskList = new HashMap<>();
     private int id = 0;
     private final HistoryManager historyManager = Managers.getDefaultHistory();
+    private final Set<Task> prioritizedTasks = new TreeSet<>(Comparator.comparing(Task::getStartTime));
+
+    private boolean validate(Task taskForValidate) {
+        return getPrioritizedTasks().stream()
+                .filter(task -> !task.getClass().equals(Epic.class) && task.getStartTime().isBefore(taskForValidate.getEndTime())
+                        & task.getEndTime().isAfter(taskForValidate.getStartTime()))
+                .toList().isEmpty();
+    }
 
     protected void addToHistory(Task task) {
         historyManager.addToHistory(task);
+    }
+
+    private void addToSetPrioritizedTasks(Task task) {
+        if (task.getStartTime() != null) {
+            prioritizedTasks.add(task);
+        }
+    }
+
+    private void removeFromSetPrioritizedTasks(Task task) {
+        prioritizedTasks.remove(task);
+    }
+
+    @Override
+    public List<Task> getPrioritizedTasks() {
+        return List.copyOf(prioritizedTasks);
     }
 
     @Override
@@ -45,10 +69,15 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void createTask(Task task) {
-        if (task.getID() == 0) {
-            task.setID(makeIDTask());
+        if (validate(task)) {
+            if (task.getID() == 0) {
+                task.setID(makeIDTask());
+            }
+            taskList.put(task.getID(), task);
+            addToSetPrioritizedTasks(task);
+        } else {
+            throw new TimeReservedException("Время занято для - " + task.getName());
         }
-        taskList.put(task.getID(),task);
     }
 
     @Override
@@ -57,16 +86,20 @@ public class InMemoryTaskManager implements TaskManager {
             epic.setID(makeIDTask());
         }
         epicList.put(epic.getID(),epic);
-        epic.setStatus(Status.NEW);
     }
 
     @Override
     public void createSubTask(SubTask subTask) {
-        if (subTask.getID() == 0) {
-            subTask.setID(makeIDTask());
+        if (validate(subTask)) {
+            if (subTask.getID() == 0) {
+                subTask.setID(makeIDTask());
+            }
+            subTaskList.put(subTask.getID(), subTask);
+            epicList.get(subTask.getEpicID()).addSubTaskToEpic(subTask);
+            addToSetPrioritizedTasks(subTask);
+        } else {
+            throw new TimeReservedException("Время занято для - " + subTask.getName());
         }
-        subTaskList.put(subTask.getID(),subTask);
-        epicList.get(subTask.getEpicID()).addSubTaskToEpic(subTask);
     }
 
     @Override
@@ -89,6 +122,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (!taskList.isEmpty()) {
             for (Task task : taskList.values()) {
                 historyManager.remove(task.getID());
+                removeFromSetPrioritizedTasks(task);
             }
             taskList.clear();
         }
@@ -112,6 +146,7 @@ public class InMemoryTaskManager implements TaskManager {
             for (SubTask subTask : deleteList) {
                 removeTask(subTask);
                 historyManager.remove(subTask.getID());
+                removeFromSetPrioritizedTasks(subTask);
             }
         }
     }
@@ -122,6 +157,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (taskList.containsKey(taskID)) {
             taskList.remove(taskID);
             historyManager.remove(taskID);
+            removeFromSetPrioritizedTasks(task);
         } else if (epicList.containsKey(taskID)) {
             if (!subTaskList.isEmpty()) {
                 ArrayList<SubTask> deleteList = new ArrayList<>(subTaskList.values());
@@ -129,6 +165,7 @@ public class InMemoryTaskManager implements TaskManager {
                     if (subTask.getEpicID() == taskID) {
                         removeTask(subTask);
                         historyManager.remove(subTask.getID());
+                        removeFromSetPrioritizedTasks(subTask);
                     }
                 }
             }
@@ -139,13 +176,20 @@ public class InMemoryTaskManager implements TaskManager {
             epic.removeSubTaskFromEpic(subTaskList.get(taskID));
             subTaskList.remove(taskID);
             historyManager.remove(taskID);
+            removeFromSetPrioritizedTasks(task);
         }
     }
 
     @Override
     public void updateTask(int taskID, Task newTask) {
-        newTask.setID(taskID);
-        taskList.replace(taskID,newTask);
+        if (validate(newTask)) {
+            newTask.setID(taskID);
+            prioritizedTasks.remove(getTaskFromID(taskID));
+            taskList.replace(taskID, newTask);
+            addToSetPrioritizedTasks(newTask);
+        } else {
+            throw new TimeReservedException("Время занято для - " + newTask.getName());
+        }
     }
 
     @Override
@@ -162,11 +206,15 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateSubTask(int taskID, SubTask newSubTask) {
-        newSubTask.setID(taskID);
-        Epic epic = epicList.get(newSubTask.getEpicID());
-        epic.removeSubTaskFromEpic(subTaskList.get(taskID));
-        subTaskList.replace(taskID,newSubTask);
-        epic.addSubTaskToEpic(newSubTask);
+        if (validate(newSubTask)) {
+            newSubTask.setID(taskID);
+            Epic epic = epicList.get(newSubTask.getEpicID());
+            epic.removeSubTaskFromEpic(subTaskList.get(taskID));
+            subTaskList.replace(taskID, newSubTask);
+            epic.addSubTaskToEpic(newSubTask);
+        } else {
+            throw new TimeReservedException("Время занято для - " + newSubTask.getName());
+        }
     }
 
     @Override

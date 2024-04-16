@@ -1,15 +1,51 @@
 package model;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class Task {
     protected final String name;
     protected final String description;
     protected int id;
     protected Status status;
+    protected Duration duration;
+    protected LocalDateTime startTime;
 
-    public Task(String name, String description, Status status) {
+    protected final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yy - HH:mm");
+
+    public Task(String name, String description, Status status, Duration duration, String startTime) {
         this.name = name;
         this.description = description;
         this.status = status;
+        this.duration = duration;
+        if (startTime != null) {
+            this.startTime = LocalDateTime.parse(startTime, formatter);
+        }
+    }
+
+    public LocalDateTime getEndTime() {
+        return this.startTime.plus(duration);
+    }
+
+    public void setStartTime(String startTime) {
+        if (startTime == null) {
+            this.startTime = null;
+        } else {
+            this.startTime = LocalDateTime.parse(startTime, formatter);
+        }
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public Duration getDuration() {
+        return duration;
     }
 
     public void setID(int id) {
@@ -37,7 +73,17 @@ public class Task {
     }
 
     public String toFile() {
-        return id + "," + Type.Task + "," + name + "," + status + "," + description;
+        return id + "," + Type.Task + "," + name + "," + status
+                + "," + description + "," + duration.toMinutes() + "," + startTime.format(formatter);
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 17;
+        if (id != 0) {
+            return hash + (id * 31);
+        }
+        return hash;
     }
 
     @Override
@@ -55,6 +101,8 @@ public class Task {
                 ", description='" + description + '\'' +
                 ", status='" + status + '\'' +
                 ", id=" + id +
+                ", startTime=" + startTime +
+                ", Duration=" + duration +
                 '}';
     }
 }
