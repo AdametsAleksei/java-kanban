@@ -3,6 +3,8 @@ package model;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
+import java.util.OptionalInt;
 
 public class Task {
     protected final String name;
@@ -56,8 +58,8 @@ public class Task {
         this.status = newStatus;
     }
 
-    public int getID() {
-        return this.id;
+    public OptionalInt getID() {
+        return OptionalInt.of(this.id);
     }
 
     public String getName() {

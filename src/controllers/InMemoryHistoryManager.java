@@ -31,10 +31,10 @@ public class InMemoryHistoryManager implements HistoryManager {
         private void linkLast(Task task) {
            Node<T> node = new Node<>(task);
            if (nodeMap.isEmpty()) {
-               nodeMap.put(task.getID(),node);
+               nodeMap.put(task.getID().getAsInt(), node);
                this.head = node;
-           } else if (nodeMap.containsKey(task.getID())) {
-               Node<T> oldNode = nodeMap.get(task.getID());
+           } else if (nodeMap.containsKey(task.getID().getAsInt())) {
+               Node<T> oldNode = nodeMap.get(task.getID().getAsInt());
                if (this.head.equals(oldNode)) {
                    if (nodeMap.size() == 1) {
                        this.head = node;
@@ -62,14 +62,14 @@ public class InMemoryHistoryManager implements HistoryManager {
                    node.setPrev(this.tail);
                    this.tail = node;
                }
-               nodeMap.put(task.getID(), node);
+               nodeMap.put(task.getID().getAsInt(), node);
            } else if (nodeMap.size() == 1) {
-               nodeMap.put(task.getID(), node);
+               nodeMap.put(task.getID().getAsInt(), node);
                this.tail = node;
                this.head.setNext(node);
                node.setPrev(this.head);
            } else {
-               nodeMap.put(task.getID(),node);
+               nodeMap.put(task.getID().getAsInt(),node);
                this.tail.setNext(node);
                node.setPrev(this.tail);
                this.tail = node;

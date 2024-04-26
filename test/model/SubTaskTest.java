@@ -14,7 +14,7 @@ class SubTaskTest {
                 Status.NEW, 1, Duration.ofMinutes(10), "12.04.24 - 17:40");
         SubTask subTask2 = new SubTask("subTask2", "subTask2",
                 Status.NEW, 1, Duration.ofMinutes(10), "12.04.24 - 17:10");
-        subTask2.setID(subTask1.getID());
+        subTask2.setID(subTask1.getID().getAsInt());
         assertEquals(subTask1,subTask2,"Задачи не совпадают");
     }
 

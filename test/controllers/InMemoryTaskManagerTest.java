@@ -22,15 +22,15 @@ class InMemoryTaskManagerTest {
         Epic epic1 = new Epic("Epic 1", "Description for Epic 1");
         manager.createEpic(epic1);
         SubTask subTask1 = new SubTask("SubTask 1", "SubTask 1 for Epic 1",
-                Status.IN_PROGRESS, epic1.getID(), Duration.ofMinutes(10), "12.04.24 - 17:40");
+                Status.IN_PROGRESS, epic1.getID().getAsInt(), Duration.ofMinutes(10), "12.04.24 - 17:40");
         manager.createSubTask(subTask1);
         SubTask updateSubTask = new SubTask("SubTaskUpdate", "Description for UpdateSubTask",
-                Status.NEW, epic1.getID(), Duration.ofMinutes(10), "12.04.24 - 17:55");
-        manager.updateSubTask(subTask1.getID(),updateSubTask);
-        assertEquals(updateSubTask.getName(), manager.getTaskFromID(subTask1.getID()).getName());
-        assertEquals(updateSubTask.getDescription(), manager.getTaskFromID(subTask1.getID()).getDescription());
-        assertEquals(updateSubTask.getStatus(), manager.getTaskFromID(subTask1.getID()).getStatus());
-        assertEquals(updateSubTask, manager.getTaskFromID(subTask1.getID()));
+                Status.NEW, epic1.getID().getAsInt(), Duration.ofMinutes(10), "12.04.24 - 17:55");
+        manager.updateSubTask(subTask1.getID().getAsInt(),updateSubTask);
+        assertEquals(updateSubTask.getName(), manager.getTaskFromID(subTask1.getID().getAsInt()).getName());
+        assertEquals(updateSubTask.getDescription(), manager.getTaskFromID(subTask1.getID().getAsInt()).getDescription());
+        assertEquals(updateSubTask.getStatus(), manager.getTaskFromID(subTask1.getID().getAsInt()).getStatus());
+        assertEquals(updateSubTask, manager.getTaskFromID(subTask1.getID().getAsInt()));
     }
 
     @Test
@@ -38,11 +38,11 @@ class InMemoryTaskManagerTest {
         Epic epic1 = new Epic("Epic 1", "Description for Epic 1");
         manager.createEpic(epic1);
         Epic updateEpic = new Epic("EpicUpdate", "Description for UpdateEpic");
-        manager.updateEpic(epic1.getID(),updateEpic);
-        assertEquals(updateEpic.getName(), manager.getTaskFromID(epic1.getID()).getName());
-        assertEquals(updateEpic.getDescription(), manager.getTaskFromID(epic1.getID()).getDescription());
-        assertEquals(updateEpic.getStatus(), manager.getTaskFromID(epic1.getID()).getStatus());
-        assertEquals(updateEpic, manager.getTaskFromID(epic1.getID()));
+        manager.updateEpic(epic1.getID().getAsInt(),updateEpic);
+        assertEquals(updateEpic.getName(), manager.getTaskFromID(epic1.getID().getAsInt()).getName());
+        assertEquals(updateEpic.getDescription(), manager.getTaskFromID(epic1.getID().getAsInt()).getDescription());
+        assertEquals(updateEpic.getStatus(), manager.getTaskFromID(epic1.getID().getAsInt()).getStatus());
+        assertEquals(updateEpic, manager.getTaskFromID(epic1.getID().getAsInt()));
     }
 
 
@@ -53,11 +53,11 @@ class InMemoryTaskManagerTest {
         manager.createTask(task1);
         Task updateTask = new Task("TaskUpdate", "Description for UpdateTask",
                 Status.IN_PROGRESS, Duration.ofMinutes(10), "12.04.24 - 17:40");
-        manager.updateTask(task1.getID(),updateTask);
-        assertEquals(updateTask.getName(), manager.getTaskFromID(task1.getID()).getName());
-        assertEquals(updateTask.getDescription(), manager.getTaskFromID(task1.getID()).getDescription());
-        assertEquals(updateTask.getStatus(), manager.getTaskFromID(task1.getID()).getStatus());
-        assertEquals(updateTask, manager.getTaskFromID(task1.getID()));
+        manager.updateTask(task1.getID().getAsInt(),updateTask);
+        assertEquals(updateTask.getName(), manager.getTaskFromID(task1.getID().getAsInt()).getName());
+        assertEquals(updateTask.getDescription(), manager.getTaskFromID(task1.getID().getAsInt()).getDescription());
+        assertEquals(updateTask.getStatus(), manager.getTaskFromID(task1.getID().getAsInt()).getStatus());
+        assertEquals(updateTask, manager.getTaskFromID(task1.getID().getAsInt()));
     }
 
     @Test
@@ -65,10 +65,10 @@ class InMemoryTaskManagerTest {
         Epic epic1 = new Epic("Epic 1", "Description for Epic 1");
         manager.createEpic(epic1);
         SubTask subTask1 = new SubTask("SubTask 1", "SubTask 1 for Epic 1",
-                Status.IN_PROGRESS,epic1.getID(), Duration.ofMinutes(10), "12.04.24 - 17:40");
+                Status.IN_PROGRESS,epic1.getID().getAsInt(), Duration.ofMinutes(10), "12.04.24 - 17:40");
         manager.createSubTask(subTask1);
         SubTask subTask2 = new SubTask("SubTask 2", "SubTask 2 for Epic 1",
-                Status.DONE,epic1.getID(), Duration.ofMinutes(10), "12.04.24 - 17:50");
+                Status.DONE,epic1.getID().getAsInt(), Duration.ofMinutes(10), "12.04.24 - 17:50");
         manager.createSubTask(subTask2);
         manager.deleteAllSubTask();
         assertTrue(manager.getAllSubTask().isEmpty());
@@ -107,10 +107,10 @@ class InMemoryTaskManagerTest {
         Epic epic1 = new Epic("Epic 1", "Description for Epic 1");
         manager.createEpic(epic1);
         SubTask subTask1 = new SubTask("SubTask 1", "SubTask 1 for Epic 1",
-                Status.IN_PROGRESS,epic1.getID(), Duration.ofMinutes(10), "12.04.24 - 17:40");
+                Status.IN_PROGRESS,epic1.getID().getAsInt(), Duration.ofMinutes(10), "12.04.24 - 17:40");
         manager.createSubTask(subTask1);
         SubTask subTask2 = new SubTask("SubTask 2", "SubTask 2 for Epic 1",
-                Status.DONE,epic1.getID(), Duration.ofMinutes(10), "12.04.24 - 18:40");
+                Status.DONE,epic1.getID().getAsInt(), Duration.ofMinutes(10), "12.04.24 - 18:40");
         manager.createSubTask(subTask2);
         assertEquals(2, manager.getAllSubTask().size());
     }
@@ -131,7 +131,7 @@ class InMemoryTaskManagerTest {
         Epic epic1 = new Epic("Epic 1", "Description for Epic 1");
         manager.createEpic(epic1);
         SubTask subTask1 = new SubTask("SubTask 1", "SubTask 1 for Epic 1",
-                Status.DONE, epic1.getID(), Duration.ofMinutes(10), "12.04.24 - 17:40");
+                Status.DONE, epic1.getID().getAsInt(), Duration.ofMinutes(10), "12.04.24 - 17:40");
         manager.createSubTask(subTask1);
         manager.setStatusSubTask(subTask1,Status.NEW);
         assertEquals(Status.NEW, manager.getTaskFromID(manager.getTaskID(subTask1)).getStatus());
@@ -142,10 +142,10 @@ class InMemoryTaskManagerTest {
         Epic epic1 = new Epic("Epic 1", "Description for Epic 1");
         manager.createEpic(epic1);
         SubTask subTask1 = new SubTask("SubTask 1", "SubTask 1 for Epic 1",
-                Status.DONE, epic1.getID(), Duration.ofMinutes(10), "12.04.24 - 17:40");
+                Status.DONE, epic1.getID().getAsInt(), Duration.ofMinutes(10), "12.04.24 - 17:40");
         manager.createSubTask(subTask1);
         SubTask subTask2 = new SubTask("SubTask 2", "SubTask 2 for Epic 1",
-                Status.NEW, epic1.getID(), Duration.ofMinutes(10), "12.04.24 - 17:10");
+                Status.NEW, epic1.getID().getAsInt(), Duration.ofMinutes(10), "12.04.24 - 17:10");
         manager.createSubTask(subTask2);
         manager.deleteAllSubTask();
         assertEquals(Status.NEW, manager.getTaskFromID(manager.getTaskID(epic1)).getStatus());
@@ -156,10 +156,10 @@ class InMemoryTaskManagerTest {
         Epic epic1 = new Epic("Epic 1", "Description for Epic 1");
         manager.createEpic(epic1);
         SubTask subTask1 = new SubTask("SubTask 1", "SubTask 1 for Epic 1",
-                Status.NEW, epic1.getID(), Duration.ofMinutes(10), "12.04.24 - 17:10");
+                Status.NEW, epic1.getID().getAsInt(), Duration.ofMinutes(10), "12.04.24 - 17:10");
         manager.createSubTask(subTask1);
         SubTask subTask2 = new SubTask("SubTask 2", "SubTask 2 for Epic 1",
-                Status.NEW, epic1.getID(), Duration.ofMinutes(10), "12.04.24 - 17:40");
+                Status.NEW, epic1.getID().getAsInt(), Duration.ofMinutes(10), "12.04.24 - 17:40");
         manager.createSubTask(subTask2);
         assertEquals(Status.NEW, manager.getTaskFromID(manager.getTaskID(epic1)).getStatus());
     }
@@ -169,10 +169,10 @@ class InMemoryTaskManagerTest {
         Epic epic1 = new Epic("Epic 1", "Description for Epic 1");
         manager.createEpic(epic1);
         SubTask subTask1 = new SubTask("SubTask 1", "SubTask 1 for Epic 1",
-                Status.DONE, epic1.getID(), Duration.ofMinutes(10), "12.04.24 - 17:15");
+                Status.DONE, epic1.getID().getAsInt(), Duration.ofMinutes(10), "12.04.24 - 17:15");
         manager.createSubTask(subTask1);
         SubTask subTask2 = new SubTask("SubTask 2", "SubTask 2 for Epic 1",
-                Status.NEW, epic1.getID(), Duration.ofMinutes(10), "12.04.24 - 17:50");
+                Status.NEW, epic1.getID().getAsInt(), Duration.ofMinutes(10), "12.04.24 - 17:50");
         manager.createSubTask(subTask2);
         assertEquals(Status.IN_PROGRESS, manager.getTaskFromID(manager.getTaskID(epic1)).getStatus());
     }
@@ -182,10 +182,10 @@ class InMemoryTaskManagerTest {
         Epic epic1 = new Epic("Epic 1", "Description for Epic 1");
         manager.createEpic(epic1);
         SubTask subTask1 = new SubTask("SubTask 1", "SubTask 1 for Epic 1",
-                Status.DONE, epic1.getID(), Duration.ofMinutes(10), "12.04.24 - 17:40");
+                Status.DONE, epic1.getID().getAsInt(), Duration.ofMinutes(10), "12.04.24 - 17:40");
         manager.createSubTask(subTask1);
         SubTask subTask2 = new SubTask("SubTask 2", "SubTask 2 for Epic 1",
-                Status.DONE, epic1.getID(), Duration.ofMinutes(10), "12.04.24 - 16:40");
+                Status.DONE, epic1.getID().getAsInt(), Duration.ofMinutes(10), "12.04.24 - 16:40");
         manager.createSubTask(subTask2);
         assertEquals(Status.DONE, manager.getTaskFromID(manager.getTaskID(epic1)).getStatus());
     }
@@ -217,7 +217,7 @@ class InMemoryTaskManagerTest {
         String description = "Description for SubTask 1";
         Status status = Status.IN_PROGRESS;
         SubTask subTask1 = new SubTask(name, description,
-                status, epic1.getID(), Duration.ofMinutes(10), "12.04.24 - 17:40");
+                status, epic1.getID().getAsInt(), Duration.ofMinutes(10), "12.04.24 - 17:40");
         manager.createSubTask(subTask1);
         assertEquals(name, manager.getTaskFromID(manager.getTaskID(subTask1)).getName());
         assertEquals(description, manager.getTaskFromID(manager.getTaskID(subTask1)).getDescription());
@@ -251,16 +251,16 @@ class InMemoryTaskManagerTest {
         Epic epic1 = new Epic("Epic 1", "Description for Epic 1");
         manager.createEpic(epic1);
         SubTask subTask1 = new SubTask("SubTask 1", "SubTask 1 for Epic 1",
-                Status.IN_PROGRESS, epic1.getID(), Duration.ofMinutes(10), "12.04.24 - 17:40");
+                Status.IN_PROGRESS, epic1.getID().getAsInt(), Duration.ofMinutes(10), "12.04.24 - 17:40");
         manager.createSubTask(subTask1);
-        assertEquals(subTask1.getID(),manager.getTaskID(subTask1));
+        assertEquals(subTask1.getID().getAsInt(),manager.getTaskID(subTask1));
     }
 
     @Test
     public void shouldBeCreatedEpicAndFindByID() {
         Epic epic1 = new Epic("Epic 1", "Description for Epic 1");
         manager.createEpic(epic1);
-        assertEquals(epic1.getID(), manager.getTaskID(epic1));
+        assertEquals(epic1.getID().getAsInt(), manager.getTaskID(epic1));
     }
 
     @Test
@@ -268,7 +268,7 @@ class InMemoryTaskManagerTest {
         Task task1 = new Task("Task 1", "Description for Task 1",
                 Status.NEW, Duration.ofMinutes(10), "12.04.24 - 17:40");
         manager.createTask(task1);
-        assertEquals(task1.getID(), manager.getTaskID(task1));
+        assertEquals(task1.getID().getAsInt(), manager.getTaskID(task1));
     }
 
     @Test
