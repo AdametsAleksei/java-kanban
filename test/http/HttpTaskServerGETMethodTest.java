@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import controllers.Managers;
 import controllers.TaskManager;
-import httpServer.HttpTaskServer;
+import httpserver.HttpTaskServer;
 import model.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -58,7 +58,6 @@ public class HttpTaskServerGETMethodTest {
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         assertEquals(200, response.statusCode());
         assertEquals(task, gson.fromJson(response.body(), Task.class));
-        System.out.println(response.body());
     }
 
     @Test

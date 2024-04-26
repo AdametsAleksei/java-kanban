@@ -6,14 +6,13 @@
     <suppressErrors>true</suppressErrors>
     <option name="thirdPartyClasspath" />
     <option name="activeLocationIds">
-      <option value="713fd9b8-ce43-488b-9abf-cd23adcbb430" />
+      <option value="cc5f4cb1-baea-41f1-9a03-93a18c784b00" />
     </option>
     <option name="locations">
       <list>
         <ConfigurationLocation id="bundled-sun-checks" type="BUNDLED" scope="All" description="Sun Checks">(bundled)</ConfigurationLocation>
         <ConfigurationLocation id="bundled-google-checks" type="BUNDLED" scope="All" description="Google Checks">(bundled)</ConfigurationLocation>
-        <ConfigurationLocation id="713fd9b8-ce43-488b-9abf-cd23adcbb430" type="PROJECT_RELATIVE" scope="Project Files" description="1">$PROJECT_DIR$/../../../Downloads/checkstyle.xml</ConfigurationLocation>
-        <ConfigurationLocation id="b6a1d4c3-9a75-42ef-9e95-56b625062d3d" type="LOCAL_FILE" scope="All" description="Yandex">$USER_HOME$/Downloads/checkstyle.xml</ConfigurationLocation>
+        <ConfigurationLocation id="cc5f4cb1-baea-41f1-9a03-93a18c784b00" type="LOCAL_FILE" scope="All" description="Yandex">$PROJECT_DIR$/../checkstyle.xml</ConfigurationLocation>
       </list>
     </option>
   </component>

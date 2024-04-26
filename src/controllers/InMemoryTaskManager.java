@@ -64,7 +64,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public int makeIDTask() {
-        while(true) {
+        while (true) {
             if (taskList.containsKey(id) || epicList.containsKey(id) || subTaskList.containsKey(id)) {
                 id++;
             } else {
@@ -140,13 +140,13 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void deleteAllEpic() {
         if (!epicList.isEmpty()) {
+            deleteAllSubTask();
             for (Task task : epicList.values()) {
-                if (task.getID().isPresent()) {
+                if (task.getID().getAsInt() != 0) {
                     historyManager.remove(task.getID().getAsInt());
                 }
             }
             epicList.clear();
-            deleteAllSubTask();
         }
     }
 

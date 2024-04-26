@@ -3,14 +3,9 @@ package adapter;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import model.Status;
 import model.Epic;
 
 import java.io.IOException;
-import java.time.Duration;
-import java.time.LocalDateTime;
-
-import static adapter.AdapterHelper.statusFromString;
 
 public class EpicAdapter extends TypeAdapter<Epic> {
 

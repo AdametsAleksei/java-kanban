@@ -1,4 +1,4 @@
-package httpServer;
+package httpserver;
 
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
@@ -75,7 +75,7 @@ public class HttpTaskServer {
         }
     }
 
-    private void handleTask (HttpExchange httpExchange) throws IOException {
+    private void handleTask(HttpExchange httpExchange) throws IOException {
         try (httpExchange) {
             String method = httpExchange.getRequestMethod();
             String[] path = httpExchange.getRequestURI().getPath().split("/");
@@ -106,7 +106,7 @@ public class HttpTaskServer {
                             taskManager.createTask(task);
                             BaseHttpHandler.sendText(httpExchange,
                                     "Task с id - " + task.getID().getAsInt() + ", создан", 200);
-                        } else { //if (taskManager.getTaskFromID(task.getID().getAsInt()) != null) {
+                        } else {
                             if (taskManager.getTaskFromID(task.getID().getAsInt()).getClass().equals(Task.class)) {
                                 taskManager.updateTask(task.getID().getAsInt(), task);
                                 BaseHttpHandler.sendText(httpExchange,
@@ -116,12 +116,7 @@ public class HttpTaskServer {
                                         "Отправленный id - " + task.getID().getAsInt()
                                                 + ", не принадлежит Task", 403);
                             }
-                        } /*else {
-                            BaseHttpHandler.sendText(httpExchange,
-                                    "Task с таким id - "
-                                            + task.getID().getAsInt() + ", уже существует", 403);
                         }
-                        */
                     } catch (TimeReservedException e) {
                         BaseHttpHandler.sendHasInteractions(httpExchange);
                     }
@@ -148,7 +143,7 @@ public class HttpTaskServer {
         }
     }
 
-    private void handleEpic (HttpExchange httpExchange) {
+    private void handleEpic(HttpExchange httpExchange) {
         try (httpExchange) {
             String method = httpExchange.getRequestMethod();
             String[] path = httpExchange.getRequestURI().getPath().split("/");
@@ -188,7 +183,7 @@ public class HttpTaskServer {
                         taskManager.createEpic(epic);
                         BaseHttpHandler.sendText(httpExchange,
                                 "Epic с id - " + epic.getID().getAsInt() + ", создан", 200);
-                    } else if (taskManager.getTaskFromID(epic.getID().getAsInt()) != null) {
+                    } else {
                         if (taskManager.getTaskFromID(epic.getID().getAsInt()).getClass().equals(Epic.class)) {
                             taskManager.updateEpic(epic.getID().getAsInt(), epic);
                             BaseHttpHandler.sendText(httpExchange,
@@ -198,10 +193,6 @@ public class HttpTaskServer {
                                     "Отправленный id - " + epic.getID().getAsInt()
                                             + ", не принадлежит Epic", 403);
                         }
-                    } else {
-                        BaseHttpHandler.sendText(httpExchange,
-                                "Epic с таким id - "
-                                        + epic.getID().getAsInt() + ", уже существует", 403);
                     }
                 } case "DELETE" -> {
                     if (path.length > 2) {
@@ -257,7 +248,7 @@ public class HttpTaskServer {
                             taskManager.createSubTask(subTask);
                             BaseHttpHandler.sendText(httpExchange,
                                     "SubTask с id - " + subTask.getID().getAsInt() + ", создан", 200);
-                        } else if (taskManager.getTaskFromID(subTask.getID().getAsInt()) != null) {
+                        } else {
                             if (taskManager.getTaskFromID(subTask.getID().getAsInt()).getClass()
                                     .equals(SubTask.class)) {
                                 taskManager.updateSubTask(subTask.getID().getAsInt(), subTask);
@@ -269,10 +260,6 @@ public class HttpTaskServer {
                                         "Отправленный id - " + subTask.getID().getAsInt()
                                                 + ", не принадлежит SubTask", 403);
                             }
-                        } else {
-                            BaseHttpHandler.sendText(httpExchange,
-                                    "Epic с таким id - "
-                                            + subTask.getID().getAsInt() + ", уже существует", 403);
                         }
                     } catch (TimeReservedException e) {
                         BaseHttpHandler.sendHasInteractions(httpExchange);
@@ -290,7 +277,7 @@ public class HttpTaskServer {
                             BaseHttpHandler.sendText(httpExchange, "SubTask c id - " + id + " удалена", 200);
                         }
                     } else {
-                        taskManager.deleteAllTask();
+                        taskManager.deleteAllSubTask();
                         BaseHttpHandler.sendText(httpExchange, "Удалены все SubTask", 200);
                     }
                 } default -> BaseHttpHandler.sendText(httpExchange,
