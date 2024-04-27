@@ -5,6 +5,7 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 import controllers.Managers;
 import controllers.TaskManager;
+import exceptions.ResponceException;
 import exceptions.TimeReservedException;
 import model.*;
 
@@ -13,18 +14,18 @@ import java.net.InetSocketAddress;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-public class HttpTaskServer {
+public class HttpTaskServerNew {
 
     private static final int PORT = 8080;
     private final HttpServer httpServer;
     private final Gson gson;
     private final TaskManager taskManager;
 
-    public HttpTaskServer() throws IOException {
+    public HttpTaskServerNew() throws IOException {
         this(Managers.getDefault());
     }
 
-    public HttpTaskServer(TaskManager taskManager) throws IOException {
+    public HttpTaskServerNew(TaskManager taskManager) throws IOException {
         this.taskManager = taskManager;
         gson = Managers.getGson();
         httpServer = HttpServer.create(new InetSocketAddress("localhost", PORT), 0);
@@ -77,23 +78,25 @@ public class HttpTaskServer {
 
     private void handleTask(HttpExchange httpExchange) throws IOException {
         try (httpExchange) {
-            String method = httpExchange.getRequestMethod();
             String[] path = httpExchange.getRequestURI().getPath().split("/");
+            String response;
             int id = -1;
-            switch (method) {
+            if (path.length > 2) {
+                id = parseIntFromPath(path[2]);
+            }
+            switch (httpExchange.getRequestMethod()) {
                 case "GET" -> {
-                    if (path.length > 2) {
-                        id = parseIntFromPath(path[2]);
+                    try {
                         if (id != -1 & taskManager.getTaskFromID(id) != null) {
-                            String taskSerialized = gson.toJson(taskManager.getTaskFromID(id));
-                            BaseHttpHandler.sendText(httpExchange, taskSerialized, 200);
+                            response = gson.toJson(taskManager.getTaskFromID(id));
+                        } else if (taskManager.getAllTask().size() > 0){
+                            response = gson.toJson(taskManager.getAllTask());
                         } else {
-                            BaseHttpHandler.sendNotFound(httpExchange,
-                                    "Указан неправильный id - " + id + ", для Task");
+                            throw new ResponceException("Указан неправильный id - " + id + ", для Task");
                         }
-                    } else {
-                        String tasksSerialized = gson.toJson(taskManager.getAllTask());
-                        BaseHttpHandler.sendText(httpExchange, tasksSerialized, 200);
+                        BaseHttpHandler.sendText(httpExchange, response, 200);
+                    } catch (ResponceException e) {
+                        BaseHttpHandler.sendNotFound(httpExchange, e.getMessage());
                     }
                 }
                 case "POST" -> {
@@ -101,28 +104,25 @@ public class HttpTaskServer {
                     String body = new String(inputStream.readAllBytes(), UTF_8);
                     Task task = gson.fromJson(body, Task.class);
                     try {
-                        if (task.getID().getAsInt() == 0
-                                || taskManager.getTaskFromID(task.getID().getAsInt()) == null) {
+                        if (taskManager.getTaskFromID(task.getID().getAsInt()) == null) {
                             taskManager.createTask(task);
-                            BaseHttpHandler.sendText(httpExchange,
-                                    "Task с id - " + task.getID().getAsInt() + ", создан", 200);
+                            response = "Task с id - " + task.getID().getAsInt() + ", создан";
+                        } else if (taskManager.getTaskFromID(task.getID().getAsInt()).getClass().equals(Task.class)) {
+                            taskManager.updateTask(task.getID().getAsInt(), task);
+                            response = "Task с id - " + task.getID().getAsInt() + ", обновлен";
                         } else {
-                            if (taskManager.getTaskFromID(task.getID().getAsInt()).getClass().equals(Task.class)) {
-                                taskManager.updateTask(task.getID().getAsInt(), task);
-                                BaseHttpHandler.sendText(httpExchange,
-                                        "Task с id - " + task.getID().getAsInt() + ", обновлен", 200);
-                            }  else {
-                                BaseHttpHandler.sendText(httpExchange,
-                                        "Отправленный id - " + task.getID().getAsInt()
-                                                + ", не принадлежит Task", 403);
-                            }
+                            throw new ResponceException("Отправленный id - " + task.getID().getAsInt()
+                                    + ", не принадлежит Task");
                         }
-                    } catch (TimeReservedException e) {
+                        BaseHttpHandler.sendText(httpExchange, response, 200);
+                    } catch (ResponceException e) {
+                        BaseHttpHandler.sendNotFound(httpExchange, e.getMessage());
+                    }
+                    catch (TimeReservedException e) {
                         BaseHttpHandler.sendHasInteractions(httpExchange);
                     }
                 } case "DELETE" -> {
                     if (path.length > 2) {
-                        id = parseIntFromPath(path[2]);
                         if (taskManager.getTaskFromID(id) == null) {
                             BaseHttpHandler.sendNotFound(httpExchange,
                                     "Task с таким id - " + id + " не обнаружен");

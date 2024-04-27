@@ -11,7 +11,7 @@ public class Main {
         File file = new File(Paths.get("src",
                 "Resources","TaskManager.csv").toString());
         // FileBackedTaskManager manager = Managers.getDefaultFile(file);
-        TaskManager manager = Managers.getDefaultFile(file);
+        TaskManager manager = Managers.getDefault(file);
         //TaskManager manager = Managers.getDefault();
         //Заведите несколько разных задач, эпиков и подзадач.
         //dd.MM.yy - HH:mm

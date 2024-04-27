@@ -8,14 +8,14 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class BaseHttpHandler {
 
-    public static void sendText(HttpExchange httpExchange, String message, int rCode) throws IOException {
-        byte[] text = message.getBytes(UTF_8);
+    public static void sendText(HttpExchange httpExchange, String response, int rCode) throws IOException {
+        byte[] text = response.getBytes(UTF_8);
         httpExchange.sendResponseHeaders(rCode, text.length);
         httpExchange.getResponseBody().write(text);
     }
 
-    public static void sendNotFound(HttpExchange httpExchange, String message) throws IOException {
-        byte[] text = message.getBytes(UTF_8);
+    public static void sendNotFound(HttpExchange httpExchange, String response) throws IOException {
+        byte[] text = response.getBytes(UTF_8);
         httpExchange.sendResponseHeaders(404, text.length);
         httpExchange.getResponseBody().write(text);
     }
