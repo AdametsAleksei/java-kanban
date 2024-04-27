@@ -89,7 +89,7 @@ public class HttpTaskServerNew {
                     try {
                         if (id != -1 & taskManager.getTaskFromID(id) != null) {
                             response = gson.toJson(taskManager.getTaskFromID(id));
-                        } else if (taskManager.getAllTask().size() > 0){
+                        } else if (taskManager.getAllTask().size() > 0) {
                             response = gson.toJson(taskManager.getAllTask());
                         } else {
                             throw new ResponceException("Указан неправильный id - " + id + ", для Task");
@@ -117,8 +117,7 @@ public class HttpTaskServerNew {
                         BaseHttpHandler.sendText(httpExchange, response, 200);
                     } catch (ResponceException e) {
                         BaseHttpHandler.sendNotFound(httpExchange, e.getMessage());
-                    }
-                    catch (TimeReservedException e) {
+                    } catch (TimeReservedException e) {
                         BaseHttpHandler.sendHasInteractions(httpExchange);
                     }
                 } case "DELETE" -> {
