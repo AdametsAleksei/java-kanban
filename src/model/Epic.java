@@ -32,7 +32,7 @@ public class Epic extends Task {
                     }
                 }
                 if (getStartTime() == null || task.getStartTime().isBefore(getStartTime())) {
-                    setStartTime(task.getStartTime().format(formatter));
+                    setStartTime(task.getStartTime().format(TimeFormatter.formatter));
                 }
                 if (getEndTime() == null || task.getEndTime().isAfter(getEndTime())) {
                     endTime = task.getEndTime();

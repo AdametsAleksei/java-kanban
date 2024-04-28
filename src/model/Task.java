@@ -2,7 +2,7 @@ package model;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.OptionalInt;
 
 public class Task {
     protected final String name;
@@ -12,15 +12,13 @@ public class Task {
     protected Duration duration;
     protected LocalDateTime startTime;
 
-    protected final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yy - HH:mm");
-
     public Task(String name, String description, Status status, Duration duration, String startTime) {
         this.name = name;
         this.description = description;
         this.status = status;
         this.duration = duration;
         if (startTime != null) {
-            this.startTime = LocalDateTime.parse(startTime, formatter);
+            this.startTime = LocalDateTime.parse(startTime, TimeFormatter.formatter);
         }
     }
 
@@ -32,7 +30,7 @@ public class Task {
         if (startTime == null) {
             this.startTime = null;
         } else {
-            this.startTime = LocalDateTime.parse(startTime, formatter);
+            this.startTime = LocalDateTime.parse(startTime, TimeFormatter.formatter);
         }
     }
 
@@ -56,8 +54,8 @@ public class Task {
         this.status = newStatus;
     }
 
-    public int getID() {
-        return this.id;
+    public OptionalInt getID() {
+        return OptionalInt.of(this.id);
     }
 
     public String getName() {
@@ -74,7 +72,7 @@ public class Task {
 
     public String toFile() {
         return id + "," + Type.Task + "," + name + "," + status
-                + "," + description + "," + duration.toMinutes() + "," + startTime.format(formatter);
+                + "," + description + "," + duration.toMinutes() + "," + startTime.format(TimeFormatter.formatter);
     }
 
     @Override

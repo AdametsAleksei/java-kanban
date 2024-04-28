@@ -11,7 +11,7 @@ class ManagersTest {
 
     @Test
     public void shouldReturnInMemoryFileBackedTaskManager() throws IOException {
-        assertEquals(Managers.getDefaultFile(File.createTempFile("test", "csv")).getClass(),
+        assertEquals(Managers.getDefault(File.createTempFile("test", "csv")).getClass(),
                 FileBackedTaskManager.class);
     }
 

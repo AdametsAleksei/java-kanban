@@ -10,7 +10,7 @@ class EpicTest {
     public void shouldBeEqualsWhenEpicIDEquals() {
         Epic epic1 = new Epic("Epic1", "Epic1");
         Epic epic2 = new Epic("Epic2", "Epic2");
-        epic2.setID(epic1.getID());
+        epic2.setID(epic1.getID().getAsInt());
         assertEquals(epic1,epic2,"Задачи не совпадают");
     }
 
